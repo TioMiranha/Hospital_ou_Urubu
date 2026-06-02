@@ -1,0 +1,135 @@
+@startuml
+
+title Sistema de Registros de Atividades Hospitalares\n<b>Diagrama de Casos de Uso</b>
+caption Responsabilidades por perfil de acesso e principais fluxos hospitalares
+
+left to right direction
+
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam linetype ortho
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam ArrowColor #334155
+skinparam ArrowThickness 1.2
+skinparam packageTitleAlignment center
+
+skinparam rectangle {
+  BackgroundColor #F8FAFC
+  BorderColor #334155
+  FontColor #0F172A
+  RoundCorner 8
+}
+
+skinparam package {
+  BackgroundColor #F8FAFC
+  BorderColor #CBD5E1
+  FontColor #0F172A
+  FontStyle bold
+}
+
+skinparam usecase {
+  BackgroundColor #FFFFFF
+  BorderColor #475569
+  FontColor #0F172A
+  FontSize 12
+}
+
+skinparam actor {
+  BackgroundColor #E0F2FE
+  BorderColor #0369A1
+  FontColor #0F172A
+  FontSize 12
+}
+
+' Atores
+actor "Usuário\nAutenticado" as Usuario
+actor "Administrador" as Admin
+actor "Médico" as Medico
+actor "Enfermeiro" as Enfermeiro
+
+Usuario <|-- Admin
+Usuario <|-- Medico
+Usuario <|-- Enfermeiro
+
+Usuario -[hidden]down- Admin
+Admin -[hidden]down- Medico
+Medico -[hidden]down- Enfermeiro
+
+' Limite do sistema
+rectangle "Sistema de Registros de Atividades Hospitalares" as Sistema {
+
+  package "1. Acesso" #EFF6FF {
+    usecase "Realizar\nLogin" as UC_Login
+    usecase "Validar Acesso\nao Sistema" as UC_ValidarAcesso
+  }
+
+  package "2. Gestão de Cadastros" #F0FDF4 {
+    usecase "Cadastrar\nFuncionário" as UC_CadastrarFuncionario
+    usecase "Cadastrar\nPaciente" as UC_CadastrarPaciente
+    usecase "Cadastrar\nMedicamento" as UC_RegistrarMedicamento
+  }
+
+  package "3. Atendimento Hospitalar" #FFF7ED {
+    usecase "Registrar\nDiagnóstico" as UC_RegistrarDiagnostico
+    usecase "Aplicar\nMedicamento" as UC_AplicarMedicamento
+    usecase "Registrar Enfermeiro\nResponsável" as UC_RegistrarEnfermeiro
+    usecase "Vincular Medicamento\na Médico e Paciente" as UC_AssociarMedicamento
+  }
+
+  package "4. Consultas e Listagens" #F8FAFC {
+    usecase "Listar\nMédicos" as UC_ListarMedicos
+    usecase "Listar\nEnfermeiros" as UC_ListarEnfermeiros
+    usecase "Listar\nPacientes" as UC_ListarPacientes
+    usecase "Listar Diagnósticos\ndo Paciente" as UC_ListarDiagnosticosPaciente
+    usecase "Listar Medicamentos\ndo Paciente" as UC_ListarMedicamentosPaciente
+  }
+
+  package "5. Relatórios" #FDF2F8 {
+    usecase "Gerar Relatório\nde Consultas" as UC_RelatorioConsultas
+    usecase "Gerar Relatório\nde Diagnósticos" as UC_RelatorioDiagnosticos
+    usecase "Gerar Relatório\nde Medicamentos Aplicados" as UC_RelatorioMedicamentos
+  }
+}
+
+' Acesso comum
+Usuario --> UC_Login
+UC_Login ..> UC_ValidarAcesso : <<include>>
+
+' Perfil: Administrador
+Admin --> UC_CadastrarFuncionario
+Admin --> UC_ListarMedicos
+Admin --> UC_ListarEnfermeiros
+Admin --> UC_ListarPacientes
+Admin --> UC_RelatorioConsultas
+Admin --> UC_RelatorioDiagnosticos
+Admin --> UC_RelatorioMedicamentos
+
+' Perfil: Médico
+Medico --> UC_CadastrarPaciente
+Medico --> UC_RegistrarMedicamento
+Medico --> UC_RegistrarDiagnostico
+Medico --> UC_AssociarMedicamento
+Medico --> UC_ListarPacientes
+Medico --> UC_ListarDiagnosticosPaciente
+Medico --> UC_ListarMedicamentosPaciente
+Medico --> UC_RelatorioConsultas
+Medico --> UC_RelatorioDiagnosticos
+Medico --> UC_RelatorioMedicamentos
+
+' Perfil: Enfermeiro
+Enfermeiro --> UC_AplicarMedicamento
+Enfermeiro --> UC_RegistrarEnfermeiro
+Enfermeiro --> UC_ListarPacientes
+Enfermeiro --> UC_ListarMedicamentosPaciente
+
+' Dependências entre casos de uso
+UC_AplicarMedicamento ..> UC_RegistrarEnfermeiro : <<include>>
+UC_AplicarMedicamento ..> UC_AssociarMedicamento : <<include>>
+
+UC_RelatorioConsultas ..> UC_ListarPacientes : <<include>>
+UC_RelatorioDiagnosticos ..> UC_ListarDiagnosticosPaciente : <<include>>
+UC_RelatorioMedicamentos ..> UC_ListarMedicamentosPaciente : <<include>>
+
+@enduml

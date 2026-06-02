@@ -1,0 +1,184 @@
+@startuml
+
+title Sistema de Registros de Atividades Hospitalares - Diagrama de Classes
+
+left to right direction
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam linetype ortho
+skinparam packageStyle rectangle
+
+skinparam class {
+  BackgroundColor #F8FAFC
+  BorderColor #334155
+  ArrowColor #334155
+  FontColor #0F172A
+}
+
+skinparam package {
+  BackgroundColor #EEF2FF
+  BorderColor #475569
+  FontColor #0F172A
+}
+
+' =========================
+' PACOTE: ACESSO AO SISTEMA
+' =========================
+package "Acesso ao Sistema" {
+
+  class Usuario {
+    - id: int
+    - email: string
+    - senhaHash: string
+    - perfil: string
+    - ativo: boolean
+    --
+    + autenticar(): boolean
+    + encerrarSessao(): void
+  }
+
+}
+
+' =========================
+' PACOTE: FUNCIONÁRIOS
+' =========================
+package "Funcionários" {
+
+  abstract class Funcionario {
+    - id: int
+    - nome: string
+    - cpf: string
+    - telefone: string
+    - email: string
+    - ativo: boolean
+    --
+    + atualizarCadastro(): void
+  }
+
+  class Medico {
+    - crm: string
+    - especialidade: string
+    --
+    + cadastrarPaciente(paciente: Paciente): void
+    + registrarDiagnostico(paciente: Paciente, descricao: string): Diagnostico
+    + prescreverMedicamento(paciente: Paciente, medicamento: Medicamento): void
+  }
+
+  class Enfermeiro {
+    - coren: string
+    --
+    + aplicarMedicamento(paciente: Paciente, medicamento: Medicamento): AplicacaoMedicamento
+  }
+
+}
+
+' =========================
+' PACOTE: PACIENTES
+' =========================
+package "Pacientes" {
+
+  class Paciente {
+    - id: int
+    - nome: string
+    - cpf: string
+    - dataNascimento: Date
+    - sexo: string
+    - telefone: string
+    - endereco: string
+    --
+    + listarDiagnosticos(): List<Diagnostico>
+    + listarMedicamentosAplicados(): List<AplicacaoMedicamento>
+  }
+
+}
+
+' =========================
+' PACOTE: ATENDIMENTO HOSPITALAR
+' =========================
+package "Atendimento Hospitalar" {
+
+  class Diagnostico {
+    - id: int
+    - descricao: string
+    - observacoes: string
+    - dataDiagnostico: DateTime
+    --
+    + gerarResumo(): string
+  }
+
+  class Medicamento {
+    - id: int
+    - nome: string
+    - descricao: string
+    - tipo: string
+    - dosagemPadrao: string
+  }
+
+  class AplicacaoMedicamento {
+    - id: int
+    - dosagemAplicada: string
+    - viaAplicacao: string
+    - dataAplicacao: DateTime
+    - observacoes: string
+    --
+    + registrarAplicacao(): void
+  }
+
+}
+
+' =========================
+' PACOTE: RELATÓRIOS
+' =========================
+package "Relatórios" {
+
+  class Relatorio {
+    - id: int
+    - tipo: string
+    - dataGeracao: DateTime
+    --
+    + gerarRelatorioConsultas(): void
+    + gerarRelatorioDiagnosticos(): void
+    + gerarRelatorioMedicamentos(): void
+  }
+
+}
+
+' =========================
+' HERANÇA
+' =========================
+Funcionario <|-- Medico
+Funcionario <|-- Enfermeiro
+
+' =========================
+' ACESSO
+' =========================
+Funcionario "1" -- "1" Usuario : possui acesso
+
+' =========================
+' CADASTRO DE PACIENTE
+' =========================
+Medico "1" -- "0..*" Paciente : cadastra
+
+' =========================
+' DIAGNÓSTICOS
+' =========================
+Medico "1" -- "0..*" Diagnostico : registra
+Paciente "1" -- "0..*" Diagnostico : possui
+
+' =========================
+' MEDICAMENTOS APLICADOS
+' =========================
+Medico "1" -- "0..*" AplicacaoMedicamento : autoriza
+Enfermeiro "1" -- "0..*" AplicacaoMedicamento : aplica
+Paciente "1" -- "0..*" AplicacaoMedicamento : recebe
+Medicamento "1" -- "0..*" AplicacaoMedicamento : é aplicado em
+
+' =========================
+' RELATÓRIOS
+' =========================
+Relatorio ..> Paciente : consulta
+Relatorio ..> Diagnostico : consulta
+Relatorio ..> AplicacaoMedicamento : consulta
+
+@enduml
