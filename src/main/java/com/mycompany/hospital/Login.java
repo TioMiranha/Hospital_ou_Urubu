@@ -29,8 +29,8 @@ public class Login extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jTextField1 = new javax.swing.JTextField();
+        login_senha4 = new javax.swing.JPasswordField();
+        login_usu = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jToggleButton1 = new javax.swing.JToggleButton();
@@ -42,9 +42,9 @@ public class Login extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Maiandra GD", 1, 24)); // NOI18N
         jLabel1.setText("Login");
 
-        jPasswordField1.addActionListener(this::senha_usu);
+        login_senha4.addActionListener(this::senha_usu);
 
-        jTextField1.addActionListener(this::usuario);
+        login_usu.addActionListener(this::login_usu);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Usuario");
@@ -72,8 +72,8 @@ public class Login extends javax.swing.JFrame {
                             .addComponent(jLabel3))
                         .addGap(28, 28, 28)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                            .addComponent(jTextField1)))
+                            .addComponent(login_senha4, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                            .addComponent(login_usu)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(161, 161, 161)
                         .addComponent(jLabel1)))
@@ -95,11 +95,11 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(login_usu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(login_senha4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                 .addComponent(mostrar_senha)
@@ -111,9 +111,9 @@ public class Login extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void usuario(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuario
+    private void login_usu(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_login_usu
         // TODO add your handling code here:
-    }//GEN-LAST:event_usuario
+    }//GEN-LAST:event_login_usu
 
     private void senha_usu(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_senha_usu
             // TODO add your handling code here:
@@ -157,9 +157,9 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JPasswordField login_senha4;
+    private javax.swing.JTextField login_usu;
     private javax.swing.JCheckBox mostrar_senha;
     // End of variables declaration//GEN-END:variables
 }
