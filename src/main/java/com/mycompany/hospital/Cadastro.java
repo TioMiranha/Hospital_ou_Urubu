@@ -29,9 +29,9 @@ public class Cadastro extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        text_cadastro = new javax.swing.JLabel();
+        text_tipo_usu = new javax.swing.JLabel();
+        tipo_usuario = new javax.swing.JScrollPane();
         tipo_usu = new javax.swing.JList<>();
         cadastro_nome_label = new javax.swing.JLabel();
         cadastro_cpf_label = new javax.swing.JLabel();
@@ -41,13 +41,14 @@ public class Cadastro extends javax.swing.JDialog {
         cpf_cadastro = new javax.swing.JTextField();
         telefone_cadastro = new javax.swing.JTextField();
         email_cadastro = new javax.swing.JTextField();
+        Botao_cadastro = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel1.setText("Cadastro");
+        text_cadastro.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        text_cadastro.setText("Cadastro");
 
-        jLabel2.setText("Tipo de usuario");
+        text_tipo_usu.setText("Tipo de usuario");
 
         tipo_usu.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Enfermeiro", "Médico" };
@@ -55,7 +56,7 @@ public class Cadastro extends javax.swing.JDialog {
             public String getElementAt(int i) { return strings[i]; }
         });
         tipo_usu.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane1.setViewportView(tipo_usu);
+        tipo_usuario.setViewportView(tipo_usu);
 
         cadastro_nome_label.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cadastro_nome_label.setText("Nome");
@@ -69,6 +70,9 @@ public class Cadastro extends javax.swing.JDialog {
         cadastro_email_label.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cadastro_email_label.setText("Email");
 
+        Botao_cadastro.setText("Cadastrar");
+        Botao_cadastro.addActionListener(this::Botao_cadastroActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -77,14 +81,14 @@ public class Cadastro extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(165, 165, 165)
-                        .addComponent(jLabel1))
+                        .addComponent(text_cadastro))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(79, 79, 79)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
+                                .addComponent(text_tipo_usu)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(tipo_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(cadastro_nome_label)
@@ -101,16 +105,20 @@ public class Cadastro extends javax.swing.JDialog {
                                         .addComponent(telefone_cadastro)
                                         .addComponent(email_cadastro)))))))
                 .addContainerGap(136, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(Botao_cadastro)
+                .addGap(38, 38, 38))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addComponent(jLabel1)
+                .addComponent(text_cadastro)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(text_tipo_usu)
+                    .addComponent(tipo_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cadastro_nome_label)
@@ -127,11 +135,17 @@ public class Cadastro extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cadastro_email_label)
                     .addComponent(email_cadastro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(58, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(Botao_cadastro)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void Botao_cadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Botao_cadastroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Botao_cadastroActionPerformed
 
     /**
      * @param args the command line arguments
@@ -171,17 +185,18 @@ public class Cadastro extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton Botao_cadastro;
     private javax.swing.JLabel cadastro_cpf_label;
     private javax.swing.JLabel cadastro_email_label;
     private javax.swing.JLabel cadastro_nome_label;
     private javax.swing.JLabel cadastro_telefone_label;
     private javax.swing.JTextField cpf_cadastro;
     private javax.swing.JTextField email_cadastro;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField nome_cadastro;
     private javax.swing.JTextField telefone_cadastro;
+    private javax.swing.JLabel text_cadastro;
+    private javax.swing.JLabel text_tipo_usu;
     private javax.swing.JList<String> tipo_usu;
+    private javax.swing.JScrollPane tipo_usuario;
     // End of variables declaration//GEN-END:variables
 }
