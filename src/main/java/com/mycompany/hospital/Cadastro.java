@@ -104,7 +104,7 @@ public class Cadastro extends javax.swing.JDialog {
                                         .addComponent(cpf_cadastro, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
                                         .addComponent(telefone_cadastro)
                                         .addComponent(email_cadastro)))))))
-                .addContainerGap(136, Short.MAX_VALUE))
+                .addContainerGap(134, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(Botao_cadastro)
