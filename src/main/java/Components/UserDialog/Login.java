@@ -2,7 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.hospital;
+package Components.UserDialog;
+
+import AppMain.Main;
+import Conexao.UsuarioDAO;
+import javax.swing.JOptionPane;
+import modelo.Usuario;
+import utils.Criptografia;
 
 /**
  *
@@ -119,14 +125,51 @@ public class Login extends javax.swing.JFrame {
             // TODO add your handling code here:
     }//GEN-LAST:event_senha_usu
 
-    private void botao_enter(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botao_enter
-        // TODO add your handling code here:
-    }//GEN-LAST:event_botao_enter
-
     private void mostrar_senhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mostrar_senhaActionPerformed
-        // TODO add your handling code here:
+        if(mostrar_senha.isSelected())
+            login_senha4.setEchoChar((char) 0);
+        else
+            login_senha4.setEchoChar('*');
     }//GEN-LAST:event_mostrar_senhaActionPerformed
 
+    private void botao_enter(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botao_enter
+
+    }//GEN-LAST:event_botao_enter
+    
+    private void Logar() {
+        //Logano
+        if(login_usu.getText().length() < 3)
+        {
+            JOptionPane.showMessageDialog(this, "Insira o seu nome de usuário");
+            return;
+        }
+        
+        if(login_senha4.getPassword().length < 3)
+        {
+            JOptionPane.showMessageDialog(this, "Senha inválida");
+            return;
+        }
+        
+        
+        try {
+            Criptografia crip = new Criptografia();
+            String senha = crip.criptografar(login_senha4.getPassword());
+            UsuarioDAO dao = new UsuarioDAO();
+            Usuario user = dao.Autenticar(login_usu.getText(), senha);
+            if(user == null) {
+                JOptionPane.showMessageDialog(this, "Erro: Credencial inválida");
+            }
+            else {
+                Main tela = new Main(user);
+                tela.setVisible(true);
+                this.dispose();
+            }
+        } catch(Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro: "+ e.getMessage());
+        }
+
+        }
+    
     /**
      * @param args the command line arguments
      */

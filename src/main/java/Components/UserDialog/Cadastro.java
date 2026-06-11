@@ -2,7 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package com.mycompany.hospital;
+package Components.UserDialog;
+
+import Conexao.UsuarioDAO;
+import javax.swing.JOptionPane;
+import modelo.Usuario;
+import utils.Criptografia;
 
 /**
  *
@@ -31,8 +36,6 @@ public class Cadastro extends javax.swing.JDialog {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tipo_usu = new javax.swing.JList<>();
         cadastro_nome_label = new javax.swing.JLabel();
         cadastro_cpf_label = new javax.swing.JLabel();
         cadastro_telefone_label = new javax.swing.JLabel();
@@ -41,6 +44,8 @@ public class Cadastro extends javax.swing.JDialog {
         cpf_cadastro = new javax.swing.JTextField();
         telefone_cadastro = new javax.swing.JTextField();
         email_cadastro = new javax.swing.JTextField();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -48,14 +53,6 @@ public class Cadastro extends javax.swing.JDialog {
         jLabel1.setText("Cadastro");
 
         jLabel2.setText("Tipo de usuario");
-
-        tipo_usu.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Enfermeiro", "Médico" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        tipo_usu.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane1.setViewportView(tipo_usu);
 
         cadastro_nome_label.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cadastro_nome_label.setText("Nome");
@@ -69,6 +66,20 @@ public class Cadastro extends javax.swing.JDialog {
         cadastro_email_label.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cadastro_email_label.setText("Email");
 
+        nome_cadastro.addActionListener(this::nome_cadastroActionPerformed);
+
+        cpf_cadastro.addActionListener(this::cpf_cadastroActionPerformed);
+
+        telefone_cadastro.addActionListener(this::telefone_cadastroActionPerformed);
+
+        email_cadastro.addActionListener(this::email_cadastroActionPerformed);
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.addActionListener(this::jComboBox1ActionPerformed);
+
+        jButton1.setText("Cadastrar-se");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -80,27 +91,31 @@ public class Cadastro extends javax.swing.JDialog {
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(79, 79, 79)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
+                                .addComponent(cadastro_nome_label)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                                .addComponent(nome_cadastro, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cadastro_cpf_label)
+                                    .addComponent(cadastro_telefone_label)
+                                    .addComponent(cadastro_email_label))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(cadastro_nome_label)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                                    .addComponent(nome_cadastro, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(cadastro_cpf_label)
-                                        .addComponent(cadastro_telefone_label)
-                                        .addComponent(cadastro_email_label))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(cpf_cadastro, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                                        .addComponent(telefone_cadastro)
-                                        .addComponent(email_cadastro)))))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(cpf_cadastro, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                                    .addComponent(telefone_cadastro)
+                                    .addComponent(email_cadastro)))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel2)
+                        .addGap(60, 60, 60)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(136, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(56, 56, 56))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -108,10 +123,10 @@ public class Cadastro extends javax.swing.JDialog {
                 .addGap(22, 22, 22)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cadastro_nome_label)
                     .addComponent(nome_cadastro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -127,12 +142,116 @@ public class Cadastro extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cadastro_email_label)
                     .addComponent(email_cadastro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(58, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void nome_cadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nome_cadastroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nome_cadastroActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void cpf_cadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cpf_cadastroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cpf_cadastroActionPerformed
+
+    private void telefone_cadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_telefone_cadastroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_telefone_cadastroActionPerformed
+
+    private void email_cadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_email_cadastroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_email_cadastroActionPerformed
+    
+       private void Cadastrar() {
+         //Logano
+       if(nome_cadastro.getText().equals("") || nome_cadastro.getText().length() < 3)
+        {
+            JOptionPane.showMessageDialog(this, "Insira um nome de usuario valido");
+            return;
+        }
+       
+        if(cpf_cadastro.getText().equals(""))
+        {
+            JOptionPane.showMessageDialog(this, "Insira o seu nome de usuário");
+            return;
+        }           
+        else(isCpfValid(cpf_cadastro.getText()))
+        {
+            
+        }
+        
+        if( telefone_cadastro.getPassword().equals(""))
+        {
+            JOptionPane.showMessageDialog(this, "Senha inválida");
+            return;
+        }
+        
+        if( email_cadastro.getPassword().equals(""))
+        {
+            JOptionPane.showMessageDialog(this, "Senha inválida");
+            return;
+        }
+           
+        Usuario user = new Usuario();
+        Criptografia crip = new Criptografia();
+       String login = jTextField1.getText();
+       try {
+           UsuarioDAO d = new UsuarioDAO();
+           Usuario u = d.Buscar(login);
+           if(u != null) {
+               JOptionPane.showMessageDialog(this, "Login ja existente. \n Insira um outro");
+               return;
+           }
+       } catch(Exception e) {
+           JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage());
+       }
+       user.setLogin(login);
+        String senha = crip.criptografar(jPasswordField1.getPassword());
+        if(senha == null) {
+            return;
+        }
+        user.setSenha(senha);
+        
+        /*char[] password = jPasswordField1.getPassword();
+        for(char pass : password) {
+         senha = senha + pass;    
+        }
+        
+        user.setSenha(crip.criptografar(jPasswordField1.getPassword()));
+        user.setSenha(senha);*/
+        
+        if(jComboBox1.getSelectedIndex() == 0)
+            user.setPermissao("U");
+        else 
+            user.setPermissao("A");
+        
+        try {
+            UsuarioDAO dao = new UsuarioDAO();
+            dao.cadastrar(user);
+           JOptionPane.showMessageDialog(this, "Usuario cadastrado com sucesso");
+        } catch(Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage());
+        }
+        
+    }
+       
+    public int isCpfValid(String cpf)
+    {
+        
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -177,11 +296,11 @@ public class Cadastro extends javax.swing.JDialog {
     private javax.swing.JLabel cadastro_telefone_label;
     private javax.swing.JTextField cpf_cadastro;
     private javax.swing.JTextField email_cadastro;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField nome_cadastro;
     private javax.swing.JTextField telefone_cadastro;
-    private javax.swing.JList<String> tipo_usu;
     // End of variables declaration//GEN-END:variables
 }
