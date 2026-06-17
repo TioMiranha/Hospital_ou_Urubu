@@ -45,7 +45,6 @@ public class Cadastro extends javax.swing.JDialog {
         telefone_cadastro = new javax.swing.JTextField();
         email_cadastro = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -76,9 +75,6 @@ public class Cadastro extends javax.swing.JDialog {
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBox1.addActionListener(this::jComboBox1ActionPerformed);
-
-        jButton1.setText("Cadastrar-se");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -112,10 +108,6 @@ public class Cadastro extends javax.swing.JDialog {
                         .addGap(60, 60, 60)
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(136, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(56, 56, 56))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -142,9 +134,7 @@ public class Cadastro extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cadastro_email_label)
                     .addComponent(email_cadastro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
         pack();
@@ -157,10 +147,6 @@ public class Cadastro extends javax.swing.JDialog {
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void cpf_cadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cpf_cadastroActionPerformed
         // TODO add your handling code here:
@@ -181,26 +167,27 @@ public class Cadastro extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Insira um nome de usuario valido");
             return;
         }
-       
+              
         if(cpf_cadastro.getText().equals(""))
         {
-            JOptionPane.showMessageDialog(this, "Insira o seu nome de usuário");
+            JOptionPane.showMessageDialog(this, "Preencha o campo do cpf");
             return;
         }           
-        else(isCpfValid(cpf_cadastro.getText()))
+        else if(!isCpfValido(cpf_cadastro.getText()))
         {
-            
-        }
-        
-        if( telefone_cadastro.getPassword().equals(""))
-        {
-            JOptionPane.showMessageDialog(this, "Senha inválida");
+           JOptionPane.showMessageDialog(this, "Insira um CPF valido");
             return;
         }
         
-        if( email_cadastro.getPassword().equals(""))
+        if(telefone_cadastro.getText().equals(""))
         {
-            JOptionPane.showMessageDialog(this, "Senha inválida");
+            JOptionPane.showMessageDialog(this, "Preencha o campo de telefone");
+            return;
+        }
+        
+        if( email_cadastro.getText().equals(""))
+        {
+            JOptionPane.showMessageDialog(this, "Preencha o campo de email");
             return;
         }
            
@@ -224,14 +211,6 @@ public class Cadastro extends javax.swing.JDialog {
         }
         user.setSenha(senha);
         
-        /*char[] password = jPasswordField1.getPassword();
-        for(char pass : password) {
-         senha = senha + pass;    
-        }
-        
-        user.setSenha(crip.criptografar(jPasswordField1.getPassword()));
-        user.setSenha(senha);*/
-        
         if(jComboBox1.getSelectedIndex() == 0)
             user.setPermissao("U");
         else 
@@ -247,9 +226,52 @@ public class Cadastro extends javax.swing.JDialog {
         
     }
        
-    public int isCpfValid(String cpf)
-    {
+       public static boolean isCpfValido(String cpf) {
+        // 1. Remove qualquer caractere que não seja número (pontos, traços, espaços)
+        if (cpf == null) {
+            return false;
+        }
+        cpf = cpf.replaceAll("[^0-9]", "");
         
+        // 2. Verifica se o tamanho está correto e se não é uma sequência de números iguais
+        // CPFs como "111.111.111-11" passam no cálculo matemático, mas são inválidos.
+        if (cpf.length() != 11 || cpf.matches("(\\d)\\1{10}")) {
+            return false;
+        }
+
+        try {
+            // 3. Cálculo do 1º Dígito Verificador
+            int soma = 0;
+            int peso = 10;
+            for (int i = 0; i < 9; i++) {
+                // 'charAt(i) - 48' ou '- '0'' converte o caractere ASCII para o número inteiro real
+                int num = cpf.charAt(i) - '0'; 
+                soma += num * peso;
+                peso--;
+            }
+
+            int resto = 11 - (soma % 11);
+            int digito1 = (resto == 10 || resto == 11) ? 0 : resto;
+
+            // 4. Cálculo do 2º Dígito Verificador
+            soma = 0;
+            peso = 11;
+            for (int i = 0; i < 10; i++) {
+                int num = cpf.charAt(i) - '0';
+                soma += num * peso;
+                peso--;
+            }
+
+            resto = 11 - (soma % 11);
+            int digito2 = (resto == 10 || resto == 11) ? 0 : resto;
+
+            // 5. Compara os dígitos calculados com os dígitos originais da string
+            return digito1 == (cpf.charAt(9) - '0') && digito2 == (cpf.charAt(10) - '0');
+
+        } catch (Exception e) {
+            // Qualquer erro de formatação inesperado retorna falso
+            return false;
+        }
     }
     
     /**
@@ -296,7 +318,6 @@ public class Cadastro extends javax.swing.JDialog {
     private javax.swing.JLabel cadastro_telefone_label;
     private javax.swing.JTextField cpf_cadastro;
     private javax.swing.JTextField email_cadastro;
-    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
