@@ -34,36 +34,34 @@ public class Login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        login_senha4 = new javax.swing.JPasswordField();
+        login_label = new javax.swing.JLabel();
+        login_senha = new javax.swing.JPasswordField();
         login_usu = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jToggleButton1 = new javax.swing.JToggleButton();
+        text_login = new javax.swing.JLabel();
+        text_senha = new javax.swing.JLabel();
+        Botao_login = new javax.swing.JToggleButton();
         mostrar_senha = new javax.swing.JCheckBox();
-        jMenuBar1 = new javax.swing.JMenuBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Maiandra GD", 1, 24)); // NOI18N
-        jLabel1.setText("Login");
+        login_label.setFont(new java.awt.Font("Maiandra GD", 1, 24)); // NOI18N
+        login_label.setText("Login");
 
-        login_senha4.addActionListener(this::senha_usu);
+        login_senha.addActionListener(this::senha_usu);
 
         login_usu.addActionListener(this::login_usu);
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setText("Usuario");
+        text_login.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        text_login.setText("Usuario");
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel3.setText("Senha");
+        text_senha.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        text_senha.setText("Senha");
 
-        jToggleButton1.setText("Enter");
-        jToggleButton1.addActionListener(this::botao_enter);
+        Botao_login.setText("Enter");
+        Botao_login.addActionListener(this::botao_enter);
 
         mostrar_senha.setText("Mostrar senha");
         mostrar_senha.addActionListener(this::mostrar_senhaActionPerformed);
-        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -74,44 +72,44 @@ public class Login extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(72, 72, 72)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
+                            .addComponent(text_login)
+                            .addComponent(text_senha))
                         .addGap(28, 28, 28)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(login_senha4, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                            .addComponent(login_senha, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
                             .addComponent(login_usu)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(161, 161, 161)
-                        .addComponent(jLabel1)))
+                        .addComponent(login_label)))
                 .addContainerGap(133, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(49, 49, 49))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(mostrar_senha)
-                        .addGap(78, 78, 78))))
+                        .addGap(78, 78, 78))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(Botao_login, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(37, 37, 37))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addComponent(jLabel1)
+                .addComponent(login_label)
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(login_usu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                    .addComponent(text_login))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(login_senha4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                    .addComponent(login_senha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(text_senha))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                 .addComponent(mostrar_senha)
-                .addGap(18, 18, 18)
-                .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33))
+                .addGap(29, 29, 29)
+                .addComponent(Botao_login)
+                .addGap(34, 34, 34))
         );
 
         pack();
@@ -196,13 +194,12 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JToggleButton jToggleButton1;
-    private javax.swing.JPasswordField login_senha4;
+    private javax.swing.JToggleButton Botao_login;
+    private javax.swing.JLabel login_label;
+    private javax.swing.JPasswordField login_senha;
     private javax.swing.JTextField login_usu;
     private javax.swing.JCheckBox mostrar_senha;
+    private javax.swing.JLabel text_login;
+    private javax.swing.JLabel text_senha;
     // End of variables declaration//GEN-END:variables
 }
