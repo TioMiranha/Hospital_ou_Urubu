@@ -31,7 +31,8 @@ public class MenuMedico extends javax.swing.JDialog {
 
         txtDrMenu = new javax.swing.JLabel();
         textFuncMenuDr = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        funcionalidadeMenuMedico = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -42,8 +43,11 @@ public class MenuMedico extends javax.swing.JDialog {
         textFuncMenuDr.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         textFuncMenuDr.setText("Escolha a funcionalidade");
 
-        jComboBox1.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Relatório Diagnostico", "Relatorio Consulta", "Relatorio Medicamentos Aplicados", "Lista Diagnostico Paciente", "Listar Pacientes", "Listar Medicamento do Paciente", "Cadastrar Funcionario", "Cadastrar medicamento", "Casdastrar Paciente" }));
+        funcionalidadeMenuMedico.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
+        funcionalidadeMenuMedico.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Registrar Diagnóstico", "Listar dados", "Cadastrar Paciente", "Registra Receita" }));
+
+        jButton1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jButton1.setText("Ir");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -55,9 +59,13 @@ public class MenuMedico extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(textFuncMenuDr)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(funcionalidadeMenuMedico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(txtDrMenu))
-                .addContainerGap(430, Short.MAX_VALUE))
+                .addContainerGap(495, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(50, 50, 50))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -67,8 +75,10 @@ public class MenuMedico extends javax.swing.JDialog {
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(textFuncMenuDr)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(383, Short.MAX_VALUE))
+                    .addComponent(funcionalidadeMenuMedico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 303, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(50, 50, 50))
         );
 
         setBounds(0, 0, 916, 509);
@@ -112,7 +122,8 @@ public class MenuMedico extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> funcionalidadeMenuMedico;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel textFuncMenuDr;
     private javax.swing.JLabel txtDrMenu;
     // End of variables declaration//GEN-END:variables
