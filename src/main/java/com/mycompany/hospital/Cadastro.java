@@ -32,13 +32,21 @@ public class Cadastro extends javax.swing.JDialog {
         textCadastro = new javax.swing.JLabel();
         textTipoUsuarioCadastro = new javax.swing.JLabel();
         txtCpfCadastro = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cpfCadastroUsu = new javax.swing.JTextField();
+        tipoUsuarioCadastroUsu = new javax.swing.JComboBox<>();
         textNomeCadastro = new javax.swing.JLabel();
-        nomeUsuarioCadastro = new javax.swing.JTextField();
+        nomeCadastroUsu = new javax.swing.JTextField();
         textSobreNomeCadastro = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        telefoneCadastroUsu = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        textSobreNomeCadastro1 = new javax.swing.JLabel();
+        emailCadastroUsu = new javax.swing.JTextField();
+        textSobreNomeCadastro2 = new javax.swing.JLabel();
+        textSobreNomeCadastro3 = new javax.swing.JLabel();
+        crmCadastroUsu = new javax.swing.JTextField();
+        corenCadastroUsu = new javax.swing.JTextField();
+        textSobreNomeCadastro4 = new javax.swing.JLabel();
+        especialidadeCadastroUsu = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("CADASTRO");
@@ -52,26 +60,50 @@ public class Cadastro extends javax.swing.JDialog {
         txtCpfCadastro.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         txtCpfCadastro.setText("CPF");
 
-        jTextField1.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
-        jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField1.setText("Sem Pontos");
+        cpfCadastroUsu.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
+        cpfCadastroUsu.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        cpfCadastroUsu.setText("Sem Pontos");
 
-        jComboBox1.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Médico", "Enfermeiro" }));
+        tipoUsuarioCadastroUsu.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
+        tipoUsuarioCadastroUsu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Medico", "Enfermeiro" }));
 
         textNomeCadastro.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         textNomeCadastro.setText("Nome:");
 
-        nomeUsuarioCadastro.setFont(new java.awt.Font("Times New Roman", 2, 12)); // NOI18N
-        nomeUsuarioCadastro.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        nomeCadastroUsu.setFont(new java.awt.Font("Times New Roman", 2, 12)); // NOI18N
+        nomeCadastroUsu.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        nomeCadastroUsu.addActionListener(this::nomeCadastroUsuActionPerformed);
 
         textSobreNomeCadastro.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        textSobreNomeCadastro.setText("Sobrenome");
+        textSobreNomeCadastro.setText("Telefone");
 
-        jTextField2.setFont(new java.awt.Font("Times New Roman", 2, 12)); // NOI18N
+        telefoneCadastroUsu.setFont(new java.awt.Font("Times New Roman", 2, 12)); // NOI18N
 
         jButton1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jButton1.setText("Cadastrar");
+
+        textSobreNomeCadastro1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        textSobreNomeCadastro1.setText("Email");
+
+        emailCadastroUsu.setFont(new java.awt.Font("Times New Roman", 2, 12)); // NOI18N
+
+        textSobreNomeCadastro2.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        textSobreNomeCadastro2.setText("CRM");
+
+        textSobreNomeCadastro3.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        textSobreNomeCadastro3.setText("Coren");
+
+        crmCadastroUsu.setFont(new java.awt.Font("Times New Roman", 2, 12)); // NOI18N
+        crmCadastroUsu.setText("APENAS PARA MÉDICOS");
+
+        corenCadastroUsu.setFont(new java.awt.Font("Times New Roman", 2, 12)); // NOI18N
+        corenCadastroUsu.setText("APENAS PARA ENFERMEIROS");
+
+        textSobreNomeCadastro4.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        textSobreNomeCadastro4.setText("Especialidade");
+
+        especialidadeCadastroUsu.setFont(new java.awt.Font("Times New Roman", 2, 12)); // NOI18N
+        especialidadeCadastroUsu.setText("APENAS PARA MÉDICOS");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -79,29 +111,46 @@ public class Cadastro extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(65, 65, 65)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(textSobreNomeCadastro)
+                        .addComponent(textSobreNomeCadastro4)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField2))
+                        .addComponent(especialidadeCadastroUsu, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(textNomeCadastro)
-                        .addGap(18, 18, 18)
-                        .addComponent(nomeUsuarioCadastro))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtCpfCadastro)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField1))
-                    .addComponent(textCadastro)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(textTipoUsuarioCadastro)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(612, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(textSobreNomeCadastro)
+                                .addGap(18, 18, 18)
+                                .addComponent(telefoneCadastroUsu))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(textNomeCadastro)
+                                .addGap(18, 18, 18)
+                                .addComponent(nomeCadastroUsu))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtCpfCadastro)
+                                .addGap(18, 18, 18)
+                                .addComponent(cpfCadastroUsu))
+                            .addComponent(textCadastro)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(textTipoUsuarioCadastro)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(tipoUsuarioCadastroUsu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(textSobreNomeCadastro1)
+                                .addGap(18, 18, 18)
+                                .addComponent(emailCadastroUsu, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(textSobreNomeCadastro2)
+                                .addGap(18, 18, 18)
+                                .addComponent(crmCadastroUsu, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(textSobreNomeCadastro3)
+                                .addGap(18, 18, 18)
+                                .addComponent(corenCadastroUsu, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 409, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(50, 50, 50))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -111,27 +160,51 @@ public class Cadastro extends javax.swing.JDialog {
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(textTipoUsuarioCadastro)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
+                    .addComponent(tipoUsuarioCadastroUsu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtCpfCadastro)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
+                    .addComponent(cpfCadastroUsu, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(textNomeCadastro)
-                    .addComponent(nomeUsuarioCadastro, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
+                    .addComponent(nomeCadastroUsu, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(textSobreNomeCadastro)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 147, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50))
+                    .addComponent(telefoneCadastroUsu, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(textSobreNomeCadastro1)
+                    .addComponent(emailCadastroUsu, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(textSobreNomeCadastro4)
+                    .addComponent(especialidadeCadastroUsu, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(textSobreNomeCadastro2)
+                    .addComponent(crmCadastroUsu, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(textSobreNomeCadastro3)
+                            .addComponent(corenCadastroUsu, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(50, 50, 50))))
         );
 
         setSize(new java.awt.Dimension(916, 509));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void nomeCadastroUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nomeCadastroUsuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nomeCadastroUsuActionPerformed
 
     /**
      * @param args the command line arguments
@@ -171,15 +244,23 @@ public class Cadastro extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField corenCadastroUsu;
+    private javax.swing.JTextField cpfCadastroUsu;
+    private javax.swing.JTextField crmCadastroUsu;
+    private javax.swing.JTextField emailCadastroUsu;
+    private javax.swing.JTextField especialidadeCadastroUsu;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField nomeUsuarioCadastro;
+    private javax.swing.JTextField nomeCadastroUsu;
+    private javax.swing.JTextField telefoneCadastroUsu;
     private javax.swing.JLabel textCadastro;
     private javax.swing.JLabel textNomeCadastro;
     private javax.swing.JLabel textSobreNomeCadastro;
+    private javax.swing.JLabel textSobreNomeCadastro1;
+    private javax.swing.JLabel textSobreNomeCadastro2;
+    private javax.swing.JLabel textSobreNomeCadastro3;
+    private javax.swing.JLabel textSobreNomeCadastro4;
     private javax.swing.JLabel textTipoUsuarioCadastro;
+    private javax.swing.JComboBox<String> tipoUsuarioCadastroUsu;
     private javax.swing.JLabel txtCpfCadastro;
     // End of variables declaration//GEN-END:variables
 }
