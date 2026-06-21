@@ -2,20 +2,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package com.mycompany.hospital;
+package components;
 
 /**
  *
  * @author dpaiv
  */
-public class MenuMedico extends javax.swing.JDialog {
+public class MenuListagem extends javax.swing.JDialog {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuMedico.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuListagem.class.getName());
 
     /**
-     * Creates new form MenuMedico
+     * Creates new form MenudeRelatorio
      */
-    public MenuMedico(java.awt.Frame parent, boolean modal) {
+    public MenuListagem(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
@@ -29,25 +29,25 @@ public class MenuMedico extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        txtDrMenu = new javax.swing.JLabel();
-        textFuncMenuDr = new javax.swing.JLabel();
-        funcionalidadeMenuMedico = new javax.swing.JComboBox<>();
+        txtGerarReMenuRel = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        tipoDeListaMenuListagem = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        txtDrMenu.setFont(new java.awt.Font("Rockwell Condensed", 0, 36)); // NOI18N
-        txtDrMenu.setText("Bem vindo Dr.");
-        txtDrMenu.setToolTipText("");
+        txtGerarReMenuRel.setFont(new java.awt.Font("Rockwell Condensed", 0, 36)); // NOI18N
+        txtGerarReMenuRel.setText("Gerar Listagem");
 
-        textFuncMenuDr.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        textFuncMenuDr.setText("Escolha a funcionalidade");
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel1.setText("O que você quer listar?");
 
-        funcionalidadeMenuMedico.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
-        funcionalidadeMenuMedico.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Registrar Diagnóstico", "Listar dados", "Cadastrar Paciente", "Registra Receita" }));
+        tipoDeListaMenuListagem.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
+        tipoDeListaMenuListagem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos Médicos", "Todos Enfermeiros", "Todos Pacientes", "Diagnosticos/Recitas do paciente", " " }));
 
         jButton1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jButton1.setText("Ir");
+        jButton1.setText("Gerar");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -56,12 +56,13 @@ public class MenuMedico extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(65, 65, 65)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(textFuncMenuDr)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(funcionalidadeMenuMedico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtDrMenu))
-                .addContainerGap(495, Short.MAX_VALUE))
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(tipoDeListaMenuListagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtGerarReMenuRel))
+                .addContainerGap(443, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -71,17 +72,20 @@ public class MenuMedico extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addComponent(txtDrMenu)
-                .addGap(30, 30, 30)
+                .addComponent(txtGerarReMenuRel)
+                .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(textFuncMenuDr)
-                    .addComponent(funcionalidadeMenuMedico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 303, Short.MAX_VALUE)
+                    .addComponent(jLabel1)
+                    .addComponent(tipoDeListaMenuListagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 269, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(50, 50, 50))
         );
 
-        setBounds(0, 0, 916, 509);
+        setSize(new java.awt.Dimension(916, 509));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     /**
@@ -109,7 +113,7 @@ public class MenuMedico extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                MenuMedico dialog = new MenuMedico(new javax.swing.JFrame(), true);
+                MenuListagem dialog = new MenuListagem(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -122,9 +126,10 @@ public class MenuMedico extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> funcionalidadeMenuMedico;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel textFuncMenuDr;
-    private javax.swing.JLabel txtDrMenu;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JComboBox<String> tipoDeListaMenuListagem;
+    private javax.swing.JLabel txtGerarReMenuRel;
     // End of variables declaration//GEN-END:variables
 }

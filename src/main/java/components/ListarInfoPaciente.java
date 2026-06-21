@@ -2,20 +2,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package com.mycompany.hospital;
+package components;
 
 /**
  *
  * @author dpaiv
  */
-public class MenuListagem extends javax.swing.JDialog {
+public class ListarInfoPaciente extends javax.swing.JDialog {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuListagem.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ListarInfoPaciente.class.getName());
 
     /**
      * Creates new form MenudeRelatorio
      */
-    public MenuListagem(java.awt.Frame parent, boolean modal) {
+    public ListarInfoPaciente(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
@@ -31,23 +31,38 @@ public class MenuListagem extends javax.swing.JDialog {
 
         txtGerarReMenuRel = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        tipoDeListaMenuListagem = new javax.swing.JComboBox<>();
+        tipoDeListaListarInfoPaciente = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        cpfListarInfoPaciente = new javax.swing.JTextField();
+        nomeListarInfoPaciente = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         txtGerarReMenuRel.setFont(new java.awt.Font("Rockwell Condensed", 0, 36)); // NOI18N
-        txtGerarReMenuRel.setText("Gerar Listagem");
+        txtGerarReMenuRel.setText("Gerar Listagem do Paciente");
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel1.setText("O que você quer listar?");
 
-        tipoDeListaMenuListagem.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
-        tipoDeListaMenuListagem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos Médicos", "Todos Enfermeiros", "Todos Pacientes", "Diagnosticos/Recitas do paciente", " " }));
+        tipoDeListaListarInfoPaciente.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
+        tipoDeListaListarInfoPaciente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Diagnosticos do paciente", "Recitas do paciente", " " }));
 
         jButton1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jButton1.setText("Gerar");
+
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel3.setText("CPF do paciente");
+
+        jLabel4.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel4.setText("Nome do paciente");
+
+        cpfListarInfoPaciente.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
+
+        nomeListarInfoPaciente.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
+        nomeListarInfoPaciente.setText("AUTO COMPLETE");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -60,9 +75,17 @@ public class MenuListagem extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
-                        .addComponent(tipoDeListaMenuListagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtGerarReMenuRel))
-                .addContainerGap(443, Short.MAX_VALUE))
+                        .addComponent(tipoDeListaListarInfoPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtGerarReMenuRel)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(cpfListarInfoPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addComponent(nomeListarInfoPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(377, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -76,10 +99,18 @@ public class MenuListagem extends javax.swing.JDialog {
                 .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(tipoDeListaMenuListagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
+                    .addComponent(tipoDeListaListarInfoPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(35, 35, 35)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(cpfListarInfoPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(35, 35, 35)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(nomeListarInfoPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 269, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 156, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(50, 50, 50))
         );
@@ -113,7 +144,7 @@ public class MenuListagem extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                MenuListagem dialog = new MenuListagem(new javax.swing.JFrame(), true);
+                ListarInfoPaciente dialog = new ListarInfoPaciente(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -126,10 +157,14 @@ public class MenuListagem extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField cpfListarInfoPaciente;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JComboBox<String> tipoDeListaMenuListagem;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JTextField nomeListarInfoPaciente;
+    private javax.swing.JComboBox<String> tipoDeListaListarInfoPaciente;
     private javax.swing.JLabel txtGerarReMenuRel;
     // End of variables declaration//GEN-END:variables
 }
