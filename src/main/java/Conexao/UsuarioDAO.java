@@ -16,34 +16,30 @@ import models.Usuario;
  * @author eduardo-silva
  */
 public class UsuarioDAO {
-    /* DAO => Data  Access Object
-       Objeto que centraliza o acesso de dados
-    */
+  
     
     public void cadastrar(Usuario user) throws Exception {
         if(user == null) {
             throw new Exception("Erro: Dados do Usuário vazio"); 
         }
-        //Conex
+
         Connection con = null;
-        //Sql a ser executado, com parâtros
+  
         PreparedStatement ps = null;
         Conexao conexao = new Conexao();
         
         try {
             con = conexao.abrirConexao("localhost", "3306", "testizito","root","12345678");
            System.out.println("Conexão ok");
-           String sql = "INSERT INTO usuario" + "(login, senha, permissao) VALUES" + "(?,?,?)";
+           String sql = "INSERT INTO usuario" + "(email, senhaHash, perfil) VALUES" + "(?,?,?)";
            ps = con.prepareStatement(sql);
-           // Parâmetros para substituirem as '?'â
-           ps.setString(1, user.getLogin());
-           ps.setString(2, user.getSenha());
-           ps.setString(3, user.getPermissao());
+           ps.setString(1, user.getEmail());
+           ps.setString(2, user.getSenhaHash());
+           ps.setString(3, user.getPerfil());
            ps.executeUpdate();
         } catch(Exception e) {
             throw new Exception(e.getMessage());
         } finally {
-            // Executado independente se deu certo ou errado
             conexao.fecharConexao(con, ps, null);
         }
     }
@@ -69,8 +65,8 @@ public class UsuarioDAO {
             if(rs.next()) {
                 Usuario user = new Usuario();
                 user.setId(rs.getInt("id"));
-                user.setLogin(login);
-                user.setPermissao(rs.getString("permissao"));
+                user.setEmail(login);
+                user.setPerfil(rs.getString("permissao"));
                 return user;
                 
             }
@@ -84,12 +80,12 @@ public class UsuarioDAO {
          
     }
     
-     public Usuario Autenticar(String login, String senha) throws Exception {
-         if(login == null) {
+     public Usuario Autenticar(String email, String senha) throws Exception {
+         if(email == null) {
             throw new Exception("Dado vazio");
         }
-         if(login.length() < 3) {
-             throw new Exception("Login inválido");
+         if(email.length() < 3) {
+             throw new Exception("Email inválido");
          }
          if(senha == null) {
             throw new Exception("Dado vazio");
@@ -106,15 +102,15 @@ public class UsuarioDAO {
             con = conexao.abrirConexao("localhost", "3306", "testizito", "root", "12345678");
             String sql = "SELECT * FROM usuario WHERE login = ? AND " + "senha = ?";
             ps = con.prepareStatement(sql);
-            ps.setString(1, login);
+            ps.setString(1, email);
             ps.setString(2, senha);
             rs = ps.executeQuery();
             
             if(rs.next()) {
                 Usuario user = new Usuario();
                 user.setId(rs.getInt("id"));
-                user.setLogin(login);
-                user.setPermissao(rs.getString("permissao"));
+                user.setEmail(email);
+                user.setPerfil(rs.getString("perfil"));
                 return user;
                 
             }
@@ -169,8 +165,8 @@ public class UsuarioDAO {
             while(rs.next()) {
                 Usuario user = new Usuario();
                 user.setId(rs.getInt("id"));
-                user.setLogin(rs.getString("login"));
-                user.setPermissao(rs.getString("permissao"));
+                user.setEmail(rs.getString("email"));
+                user.setPerfil(rs.getString("perfil"));
                  resposta.add(user);
             }
             return resposta;
@@ -201,8 +197,8 @@ public class UsuarioDAO {
             if(rs.next()){//achou o login
                 Usuario user = new Usuario();
                 user.setId(rs.getInt("id"));
-                user.setLogin(rs.getString("login"));
-                user.setPermissao(rs.getString("permissao"));
+                user.setEmail(rs.getString("email"));
+                user.setPerfil(rs.getString("perfil"));
                 return user;
             }else{
                 //login não encontrado
