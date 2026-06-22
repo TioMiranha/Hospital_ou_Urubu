@@ -70,36 +70,4 @@ public class Usuario {
         this.ativo = ativo;
     }
     
-    public Boolean autenticar(String email, String senha)
-    {
-        if(email.length() < 3)
-        {   
-            return false;
-        }
-        
-        if(senha.length() < 3)
-        {
-            return false;
-        }
-        
-        char pass =  senha;
-        
-        try {
-            Criptografia crip = new Criptografia();
-            String HashedPassword = crip.criptografar(senha);
-            UsuarioDAO dao = new UsuarioDAO();
-            Usuario user = dao.Autenticar(email, senha);
-            if(user == null) {
-                JOptionPane.showMessageDialog(this, "Erro: Credencial inválida");
-            }
-            else {
-                Main tela = new Main(user);
-                tela.setVisible(true);
-                this.dispose();
-            }
-        } catch(Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro: "+ e.getMessage());
-        }
-        
-    }
 }

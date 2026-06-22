@@ -45,6 +45,7 @@ public class MenuListagem extends javax.swing.JDialog {
 
         tipoDeListaMenuListagem.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
         tipoDeListaMenuListagem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos Médicos", "Todos Enfermeiros", "Todos Pacientes", "Diagnosticos/Recitas do paciente", " " }));
+        tipoDeListaMenuListagem.addActionListener(this::tipoDeListaMenuListagemActionPerformed);
 
         jButton1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jButton1.setText("Gerar");
@@ -87,6 +88,10 @@ public class MenuListagem extends javax.swing.JDialog {
         setSize(new java.awt.Dimension(916, 509));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void tipoDeListaMenuListagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipoDeListaMenuListagemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tipoDeListaMenuListagemActionPerformed
 
     /**
      * @param args the command line arguments

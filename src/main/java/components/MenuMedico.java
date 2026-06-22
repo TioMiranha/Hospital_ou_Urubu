@@ -45,6 +45,7 @@ public class MenuMedico extends javax.swing.JDialog {
 
         funcionalidadeMenuMedico.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
         funcionalidadeMenuMedico.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Registrar Diagnóstico", "Listar dados", "Cadastrar Paciente", "Registra Receita" }));
+        funcionalidadeMenuMedico.addActionListener(this::funcionalidadeMenuMedicoActionPerformed);
 
         jButton1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jButton1.setText("Ir");
@@ -83,6 +84,10 @@ public class MenuMedico extends javax.swing.JDialog {
 
         setBounds(0, 0, 916, 509);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void funcionalidadeMenuMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_funcionalidadeMenuMedicoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_funcionalidadeMenuMedicoActionPerformed
 
     /**
      * @param args the command line arguments

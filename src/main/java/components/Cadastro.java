@@ -4,6 +4,10 @@
  */
 package components;
 
+import Conexao.UsuarioDAO;
+import javax.swing.JOptionPane;
+import models.Usuario;
+
 /**
  *
  * @author dpaiv
@@ -11,14 +15,47 @@ package components;
 public class Cadastro extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Cadastro.class.getName());
-
+      private int id;
     /**
      * Creates new form Cadastro
      */
-    public Cadastro(java.awt.Frame parent, boolean modal) {
+    
+     public Cadastro(java.awt.Frame parent, boolean modal, int id) {
+        this.id = id;
         super(parent, modal);
         initComponents();
+        this.setLocationRelativeTo(null);
+        if(id>0)
+        {
+             cpfCadastroUsu.setText("Atualizar Dados");
+            jButton1.setText("Salvar");
+            preencherDados();
+        }
     }
+     
+      private void preencherDados() {
+        try {
+            UsuarioDAO dao = new UsuarioDAO();
+            Usuario u = dao.Buscar(id);
+            if(u == NULL)
+            {
+                JOptionPane.showMessageDialog(rootPane,"Erro: Usuario nao encontrado");
+            } else {
+                 if(u.getPerfil().equals("M")) {
+                    tipoUsuarioCadastroUsu.setSelectedIndex(1);
+                    nomeCadastroUsu.setText(u.getEmail());
+                }
+                 else if(u.getPerfil().equals("E"))
+                 {
+                 
+                 }
+               
+            }
+        }catch(Exception e) {
+            JOptionPane.showMessageDialog(rootPane, "Erro: " + e.getMessage());
+        }
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -63,9 +100,11 @@ public class Cadastro extends javax.swing.JDialog {
         cpfCadastroUsu.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
         cpfCadastroUsu.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         cpfCadastroUsu.setText("Sem Pontos");
+        cpfCadastroUsu.addActionListener(this::cpfCadastroUsuActionPerformed);
 
         tipoUsuarioCadastroUsu.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
         tipoUsuarioCadastroUsu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Medico", "Enfermeiro" }));
+        tipoUsuarioCadastroUsu.addActionListener(this::tipoUsuarioCadastroUsuActionPerformed);
 
         textNomeCadastro.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         textNomeCadastro.setText("Nome:");
@@ -205,6 +244,14 @@ public class Cadastro extends javax.swing.JDialog {
     private void nomeCadastroUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nomeCadastroUsuActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_nomeCadastroUsuActionPerformed
+
+    private void cpfCadastroUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cpfCadastroUsuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cpfCadastroUsuActionPerformed
+
+    private void tipoUsuarioCadastroUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipoUsuarioCadastroUsuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tipoUsuarioCadastroUsuActionPerformed
 
     /**
      * @param args the command line arguments

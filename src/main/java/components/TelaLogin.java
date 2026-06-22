@@ -4,6 +4,12 @@
  */
 package components;
 
+import Conexao.UsuarioDAO;
+import Main.Main;
+import javax.swing.JOptionPane;
+import models.Usuario;
+import utils.Criptografia;
+
 /**
  *
  * @author dpaiv
@@ -49,11 +55,13 @@ public class TelaLogin extends javax.swing.JFrame {
 
         usuarioLogin.setMinimumSize(new java.awt.Dimension(62, 22));
         usuarioLogin.setPreferredSize(new java.awt.Dimension(50, 20));
+        usuarioLogin.addActionListener(this::usuarioLoginActionPerformed);
 
         textSenhaLogin.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         textSenhaLogin.setText("Senha:");
 
         senhaUsuarioLogin.setPreferredSize(new java.awt.Dimension(50, 20));
+        senhaUsuarioLogin.addActionListener(this::senhaUsuarioLoginActionPerformed);
 
         jButton1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jButton1.setText("Login");
@@ -109,6 +117,46 @@ public class TelaLogin extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void usuarioLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuarioLoginActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_usuarioLoginActionPerformed
+
+    private void senhaUsuarioLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_senhaUsuarioLoginActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_senhaUsuarioLoginActionPerformed
+    
+    void Logar()
+    {
+        if(senhaUsuarioLogin.getText().length() < 3)
+        {   
+              JOptionPane.showMessageDialog(this, "Nome de Usuario invalido");
+        }
+        
+        if(senhaUsuarioLogin.getPassword().length < 3)
+        {
+            JOptionPane.showMessageDialog(this, "Senha do Usuario invalida");
+        }
+        
+        
+        try {
+            Criptografia crip = new Criptografia();
+            String HashedPassword = crip.criptografar(senhaUsuarioLogin.getPassword());
+            UsuarioDAO dao = new UsuarioDAO();
+            Usuario user = dao.Autenticar(senhaUsuarioLogin.getText(), HashedPassword);
+            if(user == null) {
+                JOptionPane.showMessageDialog(this, "Erro: Credencial inválida");
+            }
+            else {
+                Main tela = new Main(user);
+                tela.setVisible(true);
+                this.dispose();
+            }
+        } catch(Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro: "+ e.getMessage());
+        }
+        
+    }
+    
     /**
      * @param args the command line arguments
      */
