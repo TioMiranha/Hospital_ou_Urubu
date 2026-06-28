@@ -8,8 +8,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import models.Funcionarios.Medico;
 import models.Usuario;
 import models.Usuario;
+import utils.Criptografia;
 
 /**
  *
@@ -18,19 +20,16 @@ import models.Usuario;
 public class UsuarioDAO {
   
     
-    public void cadastrar(Usuario user) throws Exception {
+    public void Cadastrar(Usuario user)  throws Exception{
         if(user == null) {
             throw new Exception("Erro: Dados do Usuário vazio"); 
         }
-
         Connection con = null;
-  
         PreparedStatement ps = null;
         Conexao conexao = new Conexao();
         
         try {
-            con = conexao.abrirConexao("localhost", "3306", "testizito","root","12345678");
-           System.out.println("Conexão ok");
+           con = conexao.abrirConexao("localhost", "3306", "testizito","root","12345678");
            String sql = "INSERT INTO usuario" + "(email, senhaHash, perfil) VALUES" + "(?,?,?)";
            ps = con.prepareStatement(sql);
            ps.setString(1, user.getEmail());
@@ -38,11 +37,62 @@ public class UsuarioDAO {
            ps.setString(3, user.getPerfil());
            ps.executeUpdate();
         } catch(Exception e) {
-            throw new Exception(e.getMessage());
+              throw new Exception(e.getMessage());
         } finally {
             conexao.fecharConexao(con, ps, null);
         }
     }
+    
+    public void ChangeUserPassword(Usuario user) throws Exception {
+    if (user == null) {
+        throw new Exception("Erro: Dados do usuário vazio");
+    }
+
+    if (user.getId()<0) {
+        throw new Exception("Erro: ID do usuário vazio");
+    }
+
+    if (user.getSenhaHash() == null || user.getSenhaHash().trim().isEmpty()) {
+        throw new Exception("Erro: Senha vazia");
+    }
+
+    Connection con = null;
+    PreparedStatement ps = null;
+    Conexao conexao = new Conexao();
+
+    try {
+        con = conexao.abrirConexao(
+            "localhost",
+            "3306",
+            "testizito",
+            "root",
+            "12345678"
+        );
+
+        String sql = """
+            UPDATE usuario 
+            SET senhaHash = ?, deveTrocarSenha = ?
+            WHERE id = ?
+        """;
+
+        ps = con.prepareStatement(sql);
+
+        ps.setString(1, user.getSenhaHash());
+        ps.setBoolean(2, false);
+        ps.setInt(3, user.getId());
+
+        int linhasAfetadas = ps.executeUpdate();
+
+        if (linhasAfetadas == 0) {
+            throw new Exception("Nenhum usuário encontrado para alterar a senha.");
+        }
+
+    } catch (Exception e) {
+        throw new Exception("Erro ao alterar senha: " + e.getMessage());
+    } finally {
+        conexao.fecharConexao(con, ps, null);
+    }
+}
         
     public Usuario Buscar(String login) throws Exception {
          if(login == null) {
@@ -81,17 +131,9 @@ public class UsuarioDAO {
     }
     
      public Usuario Autenticar(String email, String senha) throws Exception {
-         if(email == null) {
-            throw new Exception("Dado vazio");
-        }
-         if(email.length() < 3) {
-             throw new Exception("Email inválido");
-         }
-         if(senha == null) {
-            throw new Exception("Dado vazio");
-        }
+         
          if(senha.length() != 128) {
-             throw new Exception("Login inválido");
+             throw new Exception("Senha inválida");
          }
          
          Connection con = null;
@@ -212,6 +254,31 @@ public class UsuarioDAO {
             }
 
     }
+     
+    public boolean existeAdmin() throws Exception {
+    Connection con = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    Conexao conexao = new Conexao();
+
+    try {
+        con = conexao.abrirConexao("localhost", "3306", "testizito", "root", "12345678");
+
+        String sql = "SELECT id FROM usuarios WHERE perfil = ? LIMIT 1";
+
+        ps = con.prepareStatement(sql);
+        ps.setString(1, "ADMIN");
+
+        rs = ps.executeQuery();
+
+        return rs.next();
+
+    } catch (Exception e) {
+        throw new Exception("Erro ao verificar admin: " + e.getMessage());
+    } finally {
+        conexao.fecharConexao(con, ps, rs);
+    }
+}
      
      
 }

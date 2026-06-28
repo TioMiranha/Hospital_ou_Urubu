@@ -4,6 +4,8 @@
  */
 package components;
 
+import models.Usuario;
+
 /**
  *
  * @author dpaiv
@@ -11,13 +13,14 @@ package components;
 public class MenuEnfermeiro extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuEnfermeiro.class.getName());
-
+    
+    private Usuario userEnf;
     /**
      * Creates new form MenuMedico
      */
-    public MenuEnfermeiro(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public MenuEnfermeiro(Usuario userEnf) {
         initComponents();
+        this.userEnf = userEnf;
     }
 
     /**
@@ -106,7 +109,7 @@ public class MenuEnfermeiro extends javax.swing.JDialog {
         //</editor-fold>
 
         /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        /*java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
                 MenuEnfermeiro dialog = new MenuEnfermeiro(new javax.swing.JFrame(), true);
@@ -118,7 +121,8 @@ public class MenuEnfermeiro extends javax.swing.JDialog {
                 });
                 dialog.setVisible(true);
             }
-        });
+        });*/
+         java.awt.EventQueue.invokeLater(() -> new MenuEnfermeiro(null).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

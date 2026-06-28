@@ -15,23 +15,35 @@ import utils.Criptografia;
  */
 public class Usuario {
     private int id;
+    private Integer funcionarioId;
     private String email;
     private String senhaHash;
     private String perfil;
     private Boolean ativo;
+    private Boolean deveTrocarSenha;
     
     public Usuario(){};
     
-    public Usuario(int id, String email, String senhaHash, String perfil, Boolean ativo) {
+    public Usuario(int id, String email, String senhaHash, String perfil, Boolean ativo, Boolean deveTrocarSenha, Integer funcionarioId) {
         this.id = id;
         this.email = email;
         this.senhaHash = senhaHash;
         this.perfil = perfil;
         this.ativo = ativo;
+        this.deveTrocarSenha = deveTrocarSenha;
+        this.funcionarioId = funcionarioId;
     }
 
     public int getId() {
         return id;
+    }
+
+    public Boolean getDeveTrocarSenha() {
+        return deveTrocarSenha;
+    }
+
+    public void setDeveTrocarSenha(Boolean deveTrocarSenha) {
+        this.deveTrocarSenha = deveTrocarSenha;
     }
 
     public void setId(int id) {
@@ -68,6 +80,14 @@ public class Usuario {
 
     public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
+    }
+
+    public Integer getFuncionarioId() {
+        return funcionarioId;
+    }
+
+    public void setFuncionarioId(Integer funcionarioId) {
+        this.funcionarioId = funcionarioId;
     }
     
 }

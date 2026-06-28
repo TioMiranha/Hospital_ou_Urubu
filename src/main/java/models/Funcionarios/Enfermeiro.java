@@ -10,8 +10,10 @@ import models.Usuario;
  *
  * @author eduardo-silva
  */
-public class Enfermeiro {
+public class Enfermeiro extends Funcionario {
 
+    static String coren;
+    
     public static String getCoren() {
         return coren;
     }
@@ -19,13 +21,12 @@ public class Enfermeiro {
     public static void setCoren(String coren) {
         Enfermeiro.coren = coren;
     }
-    static String coren;
     
-    public Enfermeiro(Funcionario func, String coren)
-    {
-        super();
-        this.coren = coren;
+    public Enfermeiro(){};
+    
+    public Enfermeiro(Integer id, String nome, String cpf, String telefone, String email, Boolean ativo) {
+        super(id, nome, cpf, telefone);
     }
-    
-    
+
+   
 }

@@ -8,16 +8,21 @@ package models.Funcionarios;
  *
  * @author eduardo-silva
  */
-public class Medico {
+public class Medico extends Funcionario {
+ 
+
     private String crm;
     private String especialidade;
-
-    public Medico(Funcionario func,String crm, String especialidade) {
-        super();
+    
+    public Medico(){};
+    
+    public Medico(Integer id, String nome, String cpf, String telefone, String crm,String especialidade ) {
+        super(id, nome, cpf, telefone);
         this.crm = crm;
         this.especialidade = especialidade;
+       
     }
-
+    
     public String getCrm() {
         return crm;
     }
@@ -33,5 +38,7 @@ public class Medico {
     public void setEspecialidade(String especialidade) {
         this.especialidade = especialidade;
     }
+    
+
     
 }

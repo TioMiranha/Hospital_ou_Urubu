@@ -4,9 +4,16 @@
  */
 package components;
 
+import Conexao.EnfermeiroDAO;
+import Conexao.FuncionarioDAO;
+import Conexao.MedicoDAO;
 import Conexao.UsuarioDAO;
 import javax.swing.JOptionPane;
+import models.Funcionarios.Enfermeiro;
+import models.Funcionarios.Funcionario;
+import models.Funcionarios.Medico;
 import models.Usuario;
+import utils.Criptografia;
 
 /**
  *
@@ -15,46 +22,120 @@ import models.Usuario;
 public class Cadastro extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Cadastro.class.getName());
-      private int id;
-    /**
-     * Creates new form Cadastro
-     */
+
+      private FuncionarioDAO funcDAO = new FuncionarioDAO();
+      private MedicoDAO medDAO = new MedicoDAO();
+      private EnfermeiroDAO enfDAO = new EnfermeiroDAO();
+      UsuarioDAO userDao = new UsuarioDAO();
     
-     public Cadastro(java.awt.Frame parent, boolean modal, int id) {
-        this.id = id;
+     public Cadastro(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
-        if(id>0)
-        {
-             cpfCadastroUsu.setText("Atualizar Dados");
-            jButton1.setText("Salvar");
-            preencherDados();
-        }
+        Funcionario func  = new Funcionario();
+        cpfCadastroUsu.setText("Atualizar Dados");
+        jButton1.setText("Salvar");
+     
     }
      
-      private void preencherDados() {
-        try {
-            UsuarioDAO dao = new UsuarioDAO();
-            Usuario u = dao.Buscar(id);
-            if(u == NULL)
-            {
-                JOptionPane.showMessageDialog(rootPane,"Erro: Usuario nao encontrado");
-            } else {
-                 if(u.getPerfil().equals("M")) {
-                    tipoUsuarioCadastroUsu.setSelectedIndex(1);
-                    nomeCadastroUsu.setText(u.getEmail());
-                }
-                 else if(u.getPerfil().equals("E"))
-                 {
-                 
-                 }
-               
-            }
-        }catch(Exception e) {
-            JOptionPane.showMessageDialog(rootPane, "Erro: " + e.getMessage());
+    private void cadastrarUsuario() {
+    try {
+        String cpf = cpfCadastroUsu.getText().trim();
+        String nome = nomeCadastroUsu.getText().trim();
+        String telefone = telefoneCadastroUsu.getText().trim();
+        String email = emailCadastroUsu.getText().trim();
+
+        if (nome.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Nome é obrigatório.");
+            return;
         }
+
+        if (email.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Email é obrigatório.");
+            return;
+        }
+
+        if (tipoUsuarioCadastroUsu.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(rootPane, "Selecione o tipo de usuário.");
+            return;
+        }
+
+        String userType = tipoUsuarioCadastroUsu.getSelectedItem().toString();
+
+        Criptografia crip = new Criptografia();
+        char[] tempPassword = "1234".toCharArray();
+        String hashedTempPassword = crip.criptografar(tempPassword);
+
+        if (userType.equals("Medico")) {
+
+            String especialidade = especialidadeCadastroUsu.getText().trim();
+            String crm = crmCadastroUsu.getText().trim();
+
+            Medico med = new Medico();
+
+            med.setNome(nome);
+            med.setCpf(cpf);
+            med.setTelefone(telefone);
+
+            Integer medId = funcDAO.salvar(med);
+            med.setId(medId);
+
+            med.setCrm(crm);
+            med.setEspecialidade(especialidade);
+
+            medDAO.salvar(med);
+
+            Usuario user = new Usuario();
+
+            user.setFuncionarioId(medId);
+            user.setPerfil("Medico");
+            user.setEmail(email);
+            user.setSenhaHash(hashedTempPassword);
+            user.setDeveTrocarSenha(true);
+            user.setAtivo(true);
+
+            userDao.Cadastrar(user);
+
+            JOptionPane.showMessageDialog(rootPane, "Médico cadastrado com sucesso!");
+
+        } else if (userType.equals("Enfermeiro")) {
+
+            String coren = corenCadastroUsu.getText().trim();
+
+            Enfermeiro enf = new Enfermeiro();
+
+            enf.setNome(nome);
+            enf.setCpf(cpf);
+            enf.setTelefone(telefone);
+
+            Integer enfId = funcDAO.salvar(enf);
+            enf.setId(enfId);
+
+            enf.setCoren(coren);
+
+            enfDAO.salvar(enf);
+
+            Usuario user = new Usuario();
+
+            user.setFuncionarioId(enfId);
+            user.setPerfil("Enfermeiro");
+            user.setEmail(email);
+            user.setSenhaHash(hashedTempPassword);
+            user.setDeveTrocarSenha(true);
+            user.setAtivo(true);
+
+            userDao.Cadastrar(user);
+
+            JOptionPane.showMessageDialog(rootPane, "Enfermeiro cadastrado com sucesso!");
+
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Tipo de usuário inválido.");
+        }
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(rootPane, "Erro: " + e.getMessage());
     }
+}
     
 
     /**
@@ -101,10 +182,20 @@ public class Cadastro extends javax.swing.JDialog {
         cpfCadastroUsu.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         cpfCadastroUsu.setText("Sem Pontos");
         cpfCadastroUsu.addActionListener(this::cpfCadastroUsuActionPerformed);
+        cpfCadastroUsu.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                cpfCadastroUsuKeyPressed(evt);
+            }
+        });
 
         tipoUsuarioCadastroUsu.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
         tipoUsuarioCadastroUsu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Medico", "Enfermeiro" }));
         tipoUsuarioCadastroUsu.addActionListener(this::tipoUsuarioCadastroUsuActionPerformed);
+        tipoUsuarioCadastroUsu.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tipoUsuarioCadastroUsuKeyPressed(evt);
+            }
+        });
 
         textNomeCadastro.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         textNomeCadastro.setText("Nome:");
@@ -112,19 +203,41 @@ public class Cadastro extends javax.swing.JDialog {
         nomeCadastroUsu.setFont(new java.awt.Font("Times New Roman", 2, 12)); // NOI18N
         nomeCadastroUsu.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         nomeCadastroUsu.addActionListener(this::nomeCadastroUsuActionPerformed);
+        nomeCadastroUsu.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                nomeCadastroUsuKeyPressed(evt);
+            }
+        });
 
         textSobreNomeCadastro.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         textSobreNomeCadastro.setText("Telefone");
 
         telefoneCadastroUsu.setFont(new java.awt.Font("Times New Roman", 2, 12)); // NOI18N
+        telefoneCadastroUsu.addActionListener(this::telefoneCadastroUsuActionPerformed);
+        telefoneCadastroUsu.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                telefoneCadastroUsuKeyPressed(evt);
+            }
+        });
 
         jButton1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jButton1.setText("Cadastrar");
+        jButton1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton1KeyPressed(evt);
+            }
+        });
 
         textSobreNomeCadastro1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         textSobreNomeCadastro1.setText("Email");
 
         emailCadastroUsu.setFont(new java.awt.Font("Times New Roman", 2, 12)); // NOI18N
+        emailCadastroUsu.addActionListener(this::emailCadastroUsuActionPerformed);
+        emailCadastroUsu.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                emailCadastroUsuKeyPressed(evt);
+            }
+        });
 
         textSobreNomeCadastro2.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         textSobreNomeCadastro2.setText("CRM");
@@ -134,15 +247,33 @@ public class Cadastro extends javax.swing.JDialog {
 
         crmCadastroUsu.setFont(new java.awt.Font("Times New Roman", 2, 12)); // NOI18N
         crmCadastroUsu.setText("APENAS PARA MÉDICOS");
+        crmCadastroUsu.addActionListener(this::crmCadastroUsuActionPerformed);
+        crmCadastroUsu.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                crmCadastroUsuKeyPressed(evt);
+            }
+        });
 
         corenCadastroUsu.setFont(new java.awt.Font("Times New Roman", 2, 12)); // NOI18N
         corenCadastroUsu.setText("APENAS PARA ENFERMEIROS");
+        corenCadastroUsu.addActionListener(this::corenCadastroUsuActionPerformed);
+        corenCadastroUsu.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                corenCadastroUsuKeyPressed(evt);
+            }
+        });
 
         textSobreNomeCadastro4.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         textSobreNomeCadastro4.setText("Especialidade");
 
         especialidadeCadastroUsu.setFont(new java.awt.Font("Times New Roman", 2, 12)); // NOI18N
         especialidadeCadastroUsu.setText("APENAS PARA MÉDICOS");
+        especialidadeCadastroUsu.addActionListener(this::especialidadeCadastroUsuActionPerformed);
+        especialidadeCadastroUsu.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                especialidadeCadastroUsuKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -237,12 +368,12 @@ public class Cadastro extends javax.swing.JDialog {
                         .addGap(50, 50, 50))))
         );
 
-        setSize(new java.awt.Dimension(916, 509));
+        setSize(new java.awt.Dimension(916, 526));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void nomeCadastroUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nomeCadastroUsuActionPerformed
-        // TODO add your handling code here:
+       
     }//GEN-LAST:event_nomeCadastroUsuActionPerformed
 
     private void cpfCadastroUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cpfCadastroUsuActionPerformed
@@ -252,6 +383,70 @@ public class Cadastro extends javax.swing.JDialog {
     private void tipoUsuarioCadastroUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipoUsuarioCadastroUsuActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tipoUsuarioCadastroUsuActionPerformed
+
+    private void telefoneCadastroUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_telefoneCadastroUsuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_telefoneCadastroUsuActionPerformed
+
+    private void emailCadastroUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailCadastroUsuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_emailCadastroUsuActionPerformed
+
+    private void especialidadeCadastroUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_especialidadeCadastroUsuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_especialidadeCadastroUsuActionPerformed
+
+    private void crmCadastroUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crmCadastroUsuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_crmCadastroUsuActionPerformed
+
+    private void corenCadastroUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_corenCadastroUsuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_corenCadastroUsuActionPerformed
+
+    private void tipoUsuarioCadastroUsuKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tipoUsuarioCadastroUsuKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tipoUsuarioCadastroUsuKeyPressed
+
+    private void cpfCadastroUsuKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cpfCadastroUsuKeyPressed
+        if(evt.getKeyCode() == 10)
+            cadastrarUsuario();
+    }//GEN-LAST:event_cpfCadastroUsuKeyPressed
+
+    private void nomeCadastroUsuKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nomeCadastroUsuKeyPressed
+         if(evt.getKeyCode() == 10)
+            cadastrarUsuario();
+    }//GEN-LAST:event_nomeCadastroUsuKeyPressed
+
+    private void telefoneCadastroUsuKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_telefoneCadastroUsuKeyPressed
+         if(evt.getKeyCode() == 10)
+            cadastrarUsuario();
+    }//GEN-LAST:event_telefoneCadastroUsuKeyPressed
+
+    private void emailCadastroUsuKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_emailCadastroUsuKeyPressed
+        if(evt.getKeyCode() == 10)
+            cadastrarUsuario();
+    }//GEN-LAST:event_emailCadastroUsuKeyPressed
+
+    private void especialidadeCadastroUsuKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_especialidadeCadastroUsuKeyPressed
+         if(evt.getKeyCode() == 10)
+            cadastrarUsuario();
+    }//GEN-LAST:event_especialidadeCadastroUsuKeyPressed
+
+    private void crmCadastroUsuKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_crmCadastroUsuKeyPressed
+        if(evt.getKeyCode() == 10)
+            cadastrarUsuario();
+    }//GEN-LAST:event_crmCadastroUsuKeyPressed
+
+    private void corenCadastroUsuKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_corenCadastroUsuKeyPressed
+         if(evt.getKeyCode() == 10)
+            cadastrarUsuario();
+    }//GEN-LAST:event_corenCadastroUsuKeyPressed
+
+    private void jButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyPressed
+         if(evt.getKeyCode() == 10)
+            cadastrarUsuario();
+    }//GEN-LAST:event_jButton1KeyPressed
 
     /**
      * @param args the command line arguments
@@ -278,7 +473,7 @@ public class Cadastro extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                Cadastro dialog = new Cadastro(new javax.swing.JFrame(), true);
+              Cadastro dialog = new Cadastro(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

@@ -4,6 +4,8 @@
  */
 package components;
 
+import models.Usuario;
+
 /**
  *
  * @author dpaiv
@@ -11,13 +13,13 @@ package components;
 public class MenuAdm extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuAdm.class.getName());
-
+    private Usuario userAdmin;
     /**
      * Creates new form MenuMedico
      */
-    public MenuAdm(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public MenuAdm(Usuario userAdmin) {
         initComponents();
+        this.userAdmin = userAdmin;
     }
 
     /**
@@ -106,7 +108,7 @@ public class MenuAdm extends javax.swing.JDialog {
         //</editor-fold>
 
         /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+      /*  java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
                 MenuAdm dialog = new MenuAdm(new javax.swing.JFrame(), true);
@@ -118,7 +120,8 @@ public class MenuAdm extends javax.swing.JDialog {
                 });
                 dialog.setVisible(true);
             }
-        });
+        });*/
+       java.awt.EventQueue.invokeLater(() -> new MenuAdm(null).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

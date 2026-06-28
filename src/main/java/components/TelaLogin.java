@@ -21,8 +21,9 @@ public class TelaLogin extends javax.swing.JFrame {
     /**
      * Creates new form TelaLogin
      */
-    public TelaLogin() {
+    public TelaLogin() throws Exception {
         initComponents();
+        criarAdminInicial();
     }
 
     /**
@@ -40,6 +41,7 @@ public class TelaLogin extends javax.swing.JFrame {
         textSenhaLogin = new javax.swing.JLabel();
         senhaUsuarioLogin = new javax.swing.JPasswordField();
         jButton1 = new javax.swing.JButton();
+        boxMostrarSenha = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("LOGIN");
@@ -56,16 +58,35 @@ public class TelaLogin extends javax.swing.JFrame {
         usuarioLogin.setMinimumSize(new java.awt.Dimension(62, 22));
         usuarioLogin.setPreferredSize(new java.awt.Dimension(50, 20));
         usuarioLogin.addActionListener(this::usuarioLoginActionPerformed);
+        usuarioLogin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                usuarioLoginKeyPressed(evt);
+            }
+        });
 
         textSenhaLogin.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         textSenhaLogin.setText("Senha:");
 
         senhaUsuarioLogin.setPreferredSize(new java.awt.Dimension(50, 20));
         senhaUsuarioLogin.addActionListener(this::senhaUsuarioLoginActionPerformed);
+        senhaUsuarioLogin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                senhaUsuarioLoginKeyPressed(evt);
+            }
+        });
 
         jButton1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jButton1.setText("Login");
         jButton1.addActionListener(this::jButton1ActionPerformed);
+        jButton1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton1KeyPressed(evt);
+            }
+        });
+
+        boxMostrarSenha.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        boxMostrarSenha.setText("Mostrar senha");
+        boxMostrarSenha.addActionListener(this::boxMostrarSenhaActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -85,11 +106,16 @@ public class TelaLogin extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(senhaUsuarioLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(usuarioLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(452, Short.MAX_VALUE))
+                .addContainerGap(459, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(50, 50, 50))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(boxMostrarSenha)
+                        .addGap(336, 336, 336))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -104,7 +130,9 @@ public class TelaLogin extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(textSenhaLogin)
                     .addComponent(senhaUsuarioLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 211, Short.MAX_VALUE)
+                .addGap(55, 55, 55)
+                .addComponent(boxMostrarSenha)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(50, 50, 50))
         );
@@ -124,15 +152,36 @@ public class TelaLogin extends javax.swing.JFrame {
     private void senhaUsuarioLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_senhaUsuarioLoginActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_senhaUsuarioLoginActionPerformed
+
+    private void usuarioLoginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usuarioLoginKeyPressed
+        if(evt.getKeyCode() == 10)
+            Logar();
+    }//GEN-LAST:event_usuarioLoginKeyPressed
+
+    private void senhaUsuarioLoginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_senhaUsuarioLoginKeyPressed
+        if(evt.getKeyCode() == 10)
+            Logar();
+    }//GEN-LAST:event_senhaUsuarioLoginKeyPressed
+
+    private void jButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyPressed
+        if(evt.getKeyCode() == 10)
+            Logar();    }//GEN-LAST:event_jButton1KeyPressed
+
+    private void boxMostrarSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxMostrarSenhaActionPerformed
+       if(boxMostrarSenha.isSelected())
+            senhaUsuarioLogin.setEchoChar((char) 0);
+        else
+            senhaUsuarioLogin.setEchoChar('*');
+    }//GEN-LAST:event_boxMostrarSenhaActionPerformed
     
-    void Logar()
+   private void Logar()
     {
-        if(senhaUsuarioLogin.getText().length() < 3)
+        if(usuarioLogin.getText().length() < 3 || usuarioLogin.getText().equals(""))
         {   
-              JOptionPane.showMessageDialog(this, "Nome de Usuario invalido");
+              JOptionPane.showMessageDialog(this, "Email de Usuario invalido");
         }
         
-        if(senhaUsuarioLogin.getPassword().length < 3)
+        if(senhaUsuarioLogin.getPassword().length < 3 || senhaUsuarioLogin.getPassword().equals(""))
         {
             JOptionPane.showMessageDialog(this, "Senha do Usuario invalida");
         }
@@ -142,20 +191,66 @@ public class TelaLogin extends javax.swing.JFrame {
             Criptografia crip = new Criptografia();
             String HashedPassword = crip.criptografar(senhaUsuarioLogin.getPassword());
             UsuarioDAO dao = new UsuarioDAO();
-            Usuario user = dao.Autenticar(senhaUsuarioLogin.getText(), HashedPassword);
+            Usuario user = dao.Autenticar(usuarioLogin.getText(), HashedPassword);
             if(user == null) {
                 JOptionPane.showMessageDialog(this, "Erro: Credencial inválida");
             }
             else {
-                Main tela = new Main(user);
-                tela.setVisible(true);
+                if(user.getDeveTrocarSenha())
+                {
+                        TrocarSenha telaTrocarSenha = new TrocarSenha(user);
+                        telaTrocarSenha.setVisible(true);
+                        this.dispose();
+                }
+                
+                if(user.getPerfil().equals("Medico"))
+                {
+                MenuMedico telaMedico = new MenuMedico(user);
+                telaMedico.setVisible(true);
                 this.dispose();
+                }
+                else if(user.getPerfil().equals("Enfermeiro"))
+                {
+                    MenuEnfermeiro telaEnfermeiro = new MenuEnfermeiro(user);
+                    telaEnfermeiro.setVisible(true);
+                    this.dispose();
+                }
+                else if(user.getPerfil().equals("Admin"))
+                {
+                    MenuAdm telaEnfermeiro = new MenuAdm(user);
+                    telaEnfermeiro.setVisible(true);
+                    this.dispose();
+                }
             }
         } catch(Exception e) {
             JOptionPane.showMessageDialog(this, "Erro: "+ e.getMessage());
         }
         
     }
+   
+   public void criarAdminInicial() throws Exception {
+    UsuarioDAO usuarioDAO = new UsuarioDAO();
+
+    if (usuarioDAO.existeAdmin()) {
+        return;
+    }
+
+    Criptografia crip = new Criptografia();
+
+    char[] senha = "admin123".toCharArray();
+    String senhaHash = crip.criptografar(senha);
+
+    Usuario admin = new Usuario();
+
+    admin.setFuncionarioId(null);
+    admin.setEmail("admin@sistema.com");
+    admin.setSenhaHash(senhaHash);
+    admin.setPerfil("ADMIN");
+    admin.setDeveTrocarSenha(true);
+    admin.setAtivo(true);
+
+    usuarioDAO.Cadastrar(admin);
+}
     
     /**
      * @param args the command line arguments
@@ -179,10 +274,17 @@ public class TelaLogin extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new TelaLogin().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                new TelaLogin().setVisible(true);
+            } catch (Exception ex) {
+                System.getLogger(TelaLogin.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox boxMostrarSenha;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPasswordField senhaUsuarioLogin;

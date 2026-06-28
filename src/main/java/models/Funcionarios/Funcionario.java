@@ -10,12 +10,11 @@ package models.Funcionarios;
  */
 public class Funcionario {
     
-  private int id;
+  private Integer id;
   private String nome;
   private String cpf;
   private String telefone;
-  private String email;
-  private Boolean ativo;
+
 
     public int getId() {
         return id;
@@ -48,30 +47,15 @@ public class Funcionario {
     public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Boolean getAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(Boolean ativo) {
-        this.ativo = ativo;
-    }
-
-    public Funcionario(int id, String nome, String cpf, String telefone, String email, Boolean ativo) {
+    
+    public Funcionario(){};
+    
+    public Funcionario(Integer id, String nome, String cpf, String telefone) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
         this.telefone = telefone;
-        this.email = email;
-        this.ativo = ativo;
+
     }
   
   
