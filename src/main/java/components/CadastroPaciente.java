@@ -4,6 +4,13 @@
  */
 package components;
 
+import Conexao.PacienteDAO;
+import Conexao.UsuarioDAO;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import javax.swing.JOptionPane;
+import models.Pacientes.Paciente;
+
 /**
  *
  * @author dpaiv
@@ -11,13 +18,15 @@ package components;
 public class CadastroPaciente extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CadastroPaciente.class.getName());
-
+    PacienteDAO pacDao = new PacienteDAO();
+    
     /**
      * Creates new form Cadastro
      */
     public CadastroPaciente(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -42,7 +51,7 @@ public class CadastroPaciente extends javax.swing.JDialog {
         textSobreNomeCadastro5 = new javax.swing.JLabel();
         dataNascimentoCadastoPaciente = new javax.swing.JTextField();
         textSobreNomeCadastro6 = new javax.swing.JLabel();
-        sexoCadastoPaciente = new javax.swing.JTextField();
+        sexoComboBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("CADASTRO");
@@ -56,6 +65,7 @@ public class CadastroPaciente extends javax.swing.JDialog {
         cpfCadastroPaciente.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
         cpfCadastroPaciente.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         cpfCadastroPaciente.setText("Sem Pontos");
+        cpfCadastroPaciente.addActionListener(this::cpfCadastroPacienteActionPerformed);
 
         textNomeCadastro.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         textNomeCadastro.setText("Nome:");
@@ -81,11 +91,14 @@ public class CadastroPaciente extends javax.swing.JDialog {
         textSobreNomeCadastro5.setText("Data Nascimento");
 
         dataNascimentoCadastoPaciente.setFont(new java.awt.Font("Times New Roman", 2, 12)); // NOI18N
+        dataNascimentoCadastoPaciente.addActionListener(this::dataNascimentoCadastoPacienteActionPerformed);
 
         textSobreNomeCadastro6.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         textSobreNomeCadastro6.setText("Sexo");
 
-        sexoCadastoPaciente.setFont(new java.awt.Font("Times New Roman", 2, 12)); // NOI18N
+        sexoComboBox.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        sexoComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "M", "F", " " }));
+        sexoComboBox.addActionListener(this::sexoComboBoxActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -113,7 +126,7 @@ public class CadastroPaciente extends javax.swing.JDialog {
                                 .addComponent(textSobreNomeCadastro1)
                                 .addGap(18, 18, 18)
                                 .addComponent(emailCadastroPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 405, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 310, Short.MAX_VALUE)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(50, 50, 50))
                     .addGroup(layout.createSequentialGroup()
@@ -125,7 +138,7 @@ public class CadastroPaciente extends javax.swing.JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(textSobreNomeCadastro6)
                                 .addGap(18, 18, 18)
-                                .addComponent(sexoCadastoPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(sexoComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -156,7 +169,7 @@ public class CadastroPaciente extends javax.swing.JDialog {
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(textSobreNomeCadastro6)
-                    .addComponent(sexoCadastoPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(sexoComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(50, 50, 50))
@@ -170,6 +183,95 @@ public class CadastroPaciente extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_nomeCadastroPacienteActionPerformed
 
+    private void cpfCadastroPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cpfCadastroPacienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cpfCadastroPacienteActionPerformed
+
+    private void dataNascimentoCadastoPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dataNascimentoCadastoPacienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dataNascimentoCadastoPacienteActionPerformed
+
+    private void sexoComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sexoComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_sexoComboBoxActionPerformed
+    
+    private void limparCamposPaciente() {
+        cpfCadastroPaciente.setText("");
+        nomeCadastroPaciente.setText("");
+        telefoneCadastroPaciente.setText("");
+        emailCadastroPaciente.setText("");
+        dataNascimentoCadastoPaciente.setText("");
+
+        if (sexoComboBox.getItemCount() > 0) {
+            sexoComboBox.setSelectedIndex(0);
+        }
+}
+    
+    private void cadastrarPaciente() {
+        try {
+            String cpf = cpfCadastroPaciente.getText().trim();
+        String nome = nomeCadastroPaciente.getText().trim();
+        String telefone = telefoneCadastroPaciente.getText().trim();
+        String email = emailCadastroPaciente.getText().trim();
+        String dataDeNascimentoTexto = dataNascimentoCadastoPaciente.getText().trim();
+
+        if (nome.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Nome é obrigatório.");
+            return;
+        }
+
+        if (cpf.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "CPF é obrigatório.");
+            return;
+        }
+
+        if (email.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Email é obrigatório.");
+            return;
+        }
+
+        if (dataDeNascimentoTexto.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Data de nascimento é obrigatória.");
+            return;
+        }
+
+        if (sexoComboBox.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(rootPane, "Selecione o sexo do paciente.");
+            return;
+        }
+
+        String sexo = sexoComboBox.getSelectedItem().toString();
+
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate dataNascimento = LocalDate.parse(dataDeNascimentoTexto, formato);
+
+        Paciente pac = new Paciente();
+
+        pac.setNome(nome);
+        pac.setCpf(cpf);
+        pac.setDataNascimento(dataNascimento);
+        pac.setEmail(email);
+        pac.setTelefone(telefone);
+        pac.setSexo(sexo);
+
+        Integer idPac = pacDao.salvar(pac);
+        pac.setId(idPac);
+
+        JOptionPane.showMessageDialog(rootPane, "Paciente cadastrado com sucesso!");
+
+        limparCamposPaciente();
+
+    } catch (java.time.format.DateTimeParseException e) {
+        JOptionPane.showMessageDialog(
+            rootPane,
+            "Data de nascimento inválida. Use o formato dd/MM/yyyy."
+        );
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(rootPane, "Erro: " + e.getMessage());
+    }
+}
+    
     /**
      * @param args the command line arguments
      */
@@ -213,7 +315,7 @@ public class CadastroPaciente extends javax.swing.JDialog {
     private javax.swing.JTextField emailCadastroPaciente;
     private javax.swing.JButton jButton1;
     private javax.swing.JTextField nomeCadastroPaciente;
-    private javax.swing.JTextField sexoCadastoPaciente;
+    private javax.swing.JComboBox<String> sexoComboBox;
     private javax.swing.JTextField telefoneCadastroPaciente;
     private javax.swing.JLabel textCadastro;
     private javax.swing.JLabel textNomeCadastro;

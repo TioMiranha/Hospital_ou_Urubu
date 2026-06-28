@@ -53,7 +53,7 @@
                               <Component id="emailCadastroPaciente" min="-2" pref="139" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="405" max="32767" attributes="0"/>
+                      <EmptySpace pref="310" max="32767" attributes="0"/>
                       <Component id="jButton1" min="-2" pref="130" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
                   </Group>
@@ -67,7 +67,7 @@
                           <Group type="102" attributes="0">
                               <Component id="textSobreNomeCadastro6" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="sexoCadastoPaciente" min="-2" pref="139" max="-2" attributes="0"/>
+                              <Component id="sexoComboBox" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
@@ -109,7 +109,7 @@
               <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="textSobreNomeCadastro6" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="sexoCadastoPaciente" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
+                  <Component id="sexoComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
               <Component id="jButton1" min="-2" pref="30" max="-2" attributes="0"/>
@@ -143,6 +143,9 @@
         <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" value="Sem Pontos"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cpfCadastroPacienteActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="textNomeCadastro">
       <Properties>
@@ -215,6 +218,9 @@
           <Font name="Times New Roman" size="12" style="2"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dataNascimentoCadastoPacienteActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="textSobreNomeCadastro6">
       <Properties>
@@ -224,12 +230,25 @@
         <Property name="text" type="java.lang.String" value="Sexo"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="sexoCadastoPaciente">
+    <Component class="javax.swing.JComboBox" name="sexoComboBox">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Times New Roman" size="12" style="2"/>
+          <Font name="SansSerif" size="18" style="1"/>
+        </Property>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="3">
+            <StringItem index="0" value="M"/>
+            <StringItem index="1" value="F"/>
+            <StringItem index="2" value=" "/>
+          </StringArray>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sexoComboBoxActionPerformed"/>
+      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

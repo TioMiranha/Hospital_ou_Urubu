@@ -32,10 +32,6 @@ public class Cadastro extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
-        Funcionario func  = new Funcionario();
-        cpfCadastroUsu.setText("Atualizar Dados");
-        jButton1.setText("Salvar");
-     
     }
      
     private void cadastrarUsuario() {

@@ -62,7 +62,6 @@ public class ListarInfoPaciente extends javax.swing.JDialog {
         cpfListarInfoPaciente.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
 
         nomeListarInfoPaciente.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
-        nomeListarInfoPaciente.setText("AUTO COMPLETE");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

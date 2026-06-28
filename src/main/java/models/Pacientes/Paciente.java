@@ -4,7 +4,7 @@
  */
 package models.Pacientes;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 /**
  *
@@ -14,12 +14,15 @@ public class Paciente {
     private int id;
     private String nome;
     private String cpf;
-    private LocalDateTime dataNascimento;
+    private LocalDate dataNascimento;
     private  String sexo;
     private String telefone;
     private String endereco;
+    private String email;
+    
+    public Paciente(){};
 
-    public Paciente(int id, String nome, String cpf, LocalDateTime dataNascimento, String sexo, String telefone, String endereco) {
+    public Paciente(int id, String nome, String cpf, LocalDate dataNascimento, String sexo, String telefone, String endereco, String email) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
@@ -27,6 +30,7 @@ public class Paciente {
         this.sexo = sexo;
         this.telefone = telefone;
         this.endereco = endereco;
+        this.email = email;
     }
 
     public int getId() {
@@ -53,11 +57,11 @@ public class Paciente {
         this.cpf = cpf;
     }
 
-    public LocalDateTime getDataNascimento() {
+    public LocalDate getDataNascimento() {
         return dataNascimento;
     }
 
-    public void setDataNascimento(LocalDateTime dataNascimento) {
+    public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
 
@@ -84,4 +88,14 @@ public class Paciente {
     public void setEndereco(String endereco) {
         this.endereco = endereco;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    
 }

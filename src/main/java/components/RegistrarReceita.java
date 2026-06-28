@@ -4,6 +4,8 @@
  */
 package components;
 
+import AtendimentoHospitalar.AplicacaoMedicamento;
+
 /**
  *
  * @author dpaiv
@@ -66,10 +68,9 @@ public class RegistrarReceita extends javax.swing.JDialog {
         cpfRegistrarReceita.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
 
         nomeRegistrarReceita.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
-        nomeRegistrarReceita.setText("AUTO COMPLETE");
 
         idRegistrarReceita.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
-        idRegistrarReceita.setText("AUTO COMPLETE");
+        idRegistrarReceita.addActionListener(this::idRegistrarReceitaActionPerformed);
 
         textFuncMenuDr3.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         textFuncMenuDr3.setText("Receita:");
@@ -172,6 +173,11 @@ public class RegistrarReceita extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
+    private void idRegistrarReceitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idRegistrarReceitaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_idRegistrarReceitaActionPerformed
+    
+    
     /**
      * @param args the command line arguments
      */

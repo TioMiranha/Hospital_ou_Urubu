@@ -4,6 +4,7 @@
  */
 package AtendimentoHospitalar;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -14,7 +15,7 @@ public class AplicacaoMedicamento {
     private int id;
     private String dosagemAplicada;
     private String viaAplicacao;
-    private LocalDateTime dataAplicacao;
+    private LocalDate dataAplicacao;
     private String observacoes;
 
     public int getId() {
@@ -41,11 +42,11 @@ public class AplicacaoMedicamento {
         this.viaAplicacao = viaAplicacao;
     }
 
-    public LocalDateTime getDataAplicacao() {
+    public LocalDate getDataAplicacao() {
         return dataAplicacao;
     }
 
-    public void setDataAplicacao(LocalDateTime dataAplicacao) {
+    public void setDataAplicacao(LocalDate dataAplicacao) {
         this.dataAplicacao = dataAplicacao;
     }
 
@@ -56,12 +57,15 @@ public class AplicacaoMedicamento {
     public void setObservacoes(String observacoes) {
         this.observacoes = observacoes;
     }
-
-    public AplicacaoMedicamento(int id, String dosagemAplicada, String viaAplicacao, LocalDateTime dataAplicacao, String observacoes) {
+    
+    public AplicacaoMedicamento(){};
+    
+    public AplicacaoMedicamento(int id, String dosagemAplicada, String viaAplicacao, LocalDate dataAplicacao, String observacoes) {
         this.id = id;
         this.dosagemAplicada = dosagemAplicada;
         this.viaAplicacao = viaAplicacao;
         this.dataAplicacao = dataAplicacao;
         this.observacoes = observacoes;
     }
+    
 }

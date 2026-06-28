@@ -8,19 +8,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import models.Funcionarios.Funcionario;
 import models.Funcionarios.Medico;
-import utils.Criptografia;
+import models.Pacientes.Paciente;
 
 /**
  *
  * @author eduardo-silva
  */
-public class FuncionarioDAO {
+public class PacienteDAO {
 
-    public Integer salvar(Funcionario func) throws Exception {
-        if (func == null) {
-            throw new Exception("Erro: dados do funcionário vazio.");
+    public Integer salvar(Paciente pac) throws Exception {
+        if (pac == null) {
+            throw new Exception("Erro: dados do paciente vazio.");
         }
 
         Connection con = null;
@@ -40,16 +39,19 @@ public class FuncionarioDAO {
             System.out.println("Conexão ok");
 
             String sql = """
-                INSERT INTO funcionarios 
-                (nome, cpf, telefone) 
-                VALUES (?, ?, ?)
+                INSERT INTO paciente 
+                (nome, cpf, dataDeNascimento, sexo, email, telefone)
+                VALUES (?, ?, ?, ?, ?, ?)
             """;
 
             ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            ps.setString(1, func.getNome());
-            ps.setString(2, func.getCpf());
-            ps.setString(3, func.getTelefone());
+            ps.setString(1, pac.getNome());
+            ps.setString(2, pac.getCpf());
+            ps.setDate(3, java.sql.Date.valueOf(pac.getDataNascimento()));
+            ps.setString(4, pac.getSexo());
+            ps.setString(5, pac.getEmail());
+            ps.setString(6, pac.getTelefone());
 
             ps.executeUpdate();
 
@@ -57,14 +59,14 @@ public class FuncionarioDAO {
 
             if (rs.next()) {
                 Integer idGerado = rs.getInt(1);
-                func.setId(idGerado);
+                pac.setId(idGerado);
                 return idGerado;
             }
 
-            throw new Exception("Erro ao obter o ID gerado.");
+            throw new Exception("Erro ao obter ID do paciente cadastrado.");
 
         } catch (Exception e) {
-            throw new Exception("Erro ao salvar funcionário: " + e.getMessage());
+            throw new Exception("Erro ao salvar paciente: " + e.getMessage());
         } finally {
             conexao.fecharConexao(con, ps, rs);
         }

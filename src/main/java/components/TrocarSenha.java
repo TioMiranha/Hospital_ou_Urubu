@@ -149,7 +149,12 @@ public class TrocarSenha extends javax.swing.JFrame {
     }//GEN-LAST:event_FinalizarKeyPressed
 
     private void FinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FinalizarActionPerformed
-        TelaLogin tLogin = new TelaLogin();
+        TelaLogin tLogin = null;
+        try {
+            tLogin = new TelaLogin();
+        } catch (Exception ex) {
+            System.getLogger(TrocarSenha.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
         tLogin.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_FinalizarActionPerformed

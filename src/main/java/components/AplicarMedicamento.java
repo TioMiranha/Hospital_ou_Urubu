@@ -61,14 +61,11 @@ public class AplicarMedicamento extends javax.swing.JDialog {
         textFuncMenuDr2.setText("CPF paciente");
 
         cpfAplicarMedicamento.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
-        cpfAplicarMedicamento.setText("AUTO COMPLETE");
         cpfAplicarMedicamento.addActionListener(this::cpfAplicarMedicamentoActionPerformed);
 
         nomeAplicarMedicamento.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
-        nomeAplicarMedicamento.setText("AUTO COMPLETE");
 
         idPacienteAplicarMedicamento.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
-        idPacienteAplicarMedicamento.setText("AUTO COMPLETE");
 
         textFuncMenuDr5.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         textFuncMenuDr5.setText("ID Receita");
@@ -156,7 +153,9 @@ public class AplicarMedicamento extends javax.swing.JDialog {
     private void idAplicarMedicamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idAplicarMedicamentoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_idAplicarMedicamentoActionPerformed
-
+    
+    
+    
     /**
      * @param args the command line arguments
      */

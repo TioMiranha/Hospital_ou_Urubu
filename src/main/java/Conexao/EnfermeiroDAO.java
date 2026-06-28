@@ -12,28 +12,54 @@ import models.Funcionarios.Enfermeiro;
  *
  * @author eduardo-silva
  */
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
 public class EnfermeiroDAO {
-    public Integer salvar(Enfermeiro enf) throws Exception
-     {
-        
+
+    public Integer salvar(Enfermeiro enf) throws Exception {
+        if (enf == null) {
+            throw new Exception("Erro: dados do enfermeiro vazio.");
+        }
+
+        if (enf.getId()<=0) {
+            throw new Exception("Erro: ID do funcionário não definido para o enfermeiro.");
+        }
+
         Connection con = null;
         PreparedStatement ps = null;
         Conexao conexao = new Conexao();
-        /*
-         private String crm;
-    private String especialidade;*/
+
         try {
-           con = conexao.abrirConexao("localhost", "3306", "testizito","root","12345678");
-           System.out.println("Conexão ok");
-           String sql = "INSERT INTO usuario" + "(coren) VALUES" + "(?)";
-           ps = con.prepareStatement(sql);
-           ps.setString(1, enf.getCoren());
-           ps.executeUpdate();
-        } catch(Exception e) {
-            throw new Exception(e.getMessage());
+            con = conexao.abrirConexao(
+                "localhost",
+                "3306",
+                "testizito",
+                "root",
+                "12345678"
+            );
+
+            System.out.println("Conexão ok");
+
+            String sql = """
+                INSERT INTO enfermeiros 
+                (funcionario_id, coren)
+                VALUES (?, ?)
+            """;
+
+            ps = con.prepareStatement(sql);
+
+            ps.setInt(1, enf.getId());
+            ps.setString(2, enf.getCoren());
+
+            ps.executeUpdate();
+
+            return enf.getId();
+
+        } catch (Exception e) {
+            throw new Exception("Erro ao salvar enfermeiro: " + e.getMessage());
         } finally {
             conexao.fecharConexao(con, ps, null);
-            return 1;
         }
     }
 }

@@ -63,10 +63,9 @@ public class RegistrarDiagnostico extends javax.swing.JDialog {
         cpfRegistrarDiagnostico.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
 
         nomeRegistrarDiagnostico.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
-        nomeRegistrarDiagnostico.setText("AUTO COMPLETE");
+        nomeRegistrarDiagnostico.addActionListener(this::nomeRegistrarDiagnosticoActionPerformed);
 
         idRegistrarDiagnostico.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
-        idRegistrarDiagnostico.setText("AUTO COMPLETE");
 
         textFuncMenuDr3.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         textFuncMenuDr3.setText("Diagnostico:");
@@ -143,6 +142,10 @@ public class RegistrarDiagnostico extends javax.swing.JDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void nomeRegistrarDiagnosticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nomeRegistrarDiagnosticoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nomeRegistrarDiagnosticoActionPerformed
 
     /**
      * @param args the command line arguments
