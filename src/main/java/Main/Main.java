@@ -24,7 +24,7 @@ public class Main extends javax.swing.JFrame {
      */
      
     public Main(Usuario u) {
-      // initComponents();
+        initComponents();
         this.setLocationRelativeTo(null);
         this.user = u;
         /*if(!u.getPermissao().equals("A")) {

@@ -1,65 +1,47 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Conexao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import models.Funcionarios.Enfermeiro;
-
-/**
- *
- * @author eduardo-silva
- */
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 
 public class EnfermeiroDAO {
 
-    public Integer salvar(Enfermeiro enf) throws Exception {
-        if (enf == null) {
-            throw new Exception("Erro: dados do enfermeiro vazio.");
-        }
+    public Integer salvar(Enfermeiro enfermeiro) throws Exception {
+        String sql = "INSERT INTO enfermeiros (funcionario_id, coren) VALUES (?, ?)";
 
-        if (enf.getId()<=0) {
-            throw new Exception("Erro: ID do funcionário não definido para o enfermeiro.");
-        }
-
-        Connection con = null;
-        PreparedStatement ps = null;
-        Conexao conexao = new Conexao();
-
-        try {
-            con = conexao.abrirConexao(
-                "localhost",
-                "3306",
-                "testizito",
-                "root",
-                "12345678"
-            );
-
-            System.out.println("Conexão ok");
-
-            String sql = """
-                INSERT INTO enfermeiros 
-                (funcionario_id, coren)
-                VALUES (?, ?)
-            """;
-
-            ps = con.prepareStatement(sql);
-
-            ps.setInt(1, enf.getId());
-            ps.setString(2, enf.getCoren());
-
+        try (Connection con = new Conexao().abrirConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, enfermeiro.getId());
+            ps.setString(2, enfermeiro.getCoren());
             ps.executeUpdate();
-
-            return enf.getId();
-
-        } catch (Exception e) {
-            throw new Exception("Erro ao salvar enfermeiro: " + e.getMessage());
-        } finally {
-            conexao.fecharConexao(con, ps, null);
+            return enfermeiro.getId();
         }
+    }
+
+    public ArrayList<Enfermeiro> listar() throws Exception {
+        ArrayList<Enfermeiro> enfermeiros = new ArrayList<>();
+        String sql = """
+                SELECT f.id, f.nome, f.cpf, f.telefone, e.coren
+                FROM funcionarios f
+                INNER JOIN enfermeiros e ON e.funcionario_id = f.id
+                ORDER BY f.nome
+                """;
+
+        try (Connection con = new Conexao().abrirConexao();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Enfermeiro enfermeiro = new Enfermeiro();
+                enfermeiro.setId(rs.getInt("id"));
+                enfermeiro.setNome(rs.getString("nome"));
+                enfermeiro.setCpf(rs.getString("cpf"));
+                enfermeiro.setTelefone(rs.getString("telefone"));
+                enfermeiro.setCoren(rs.getString("coren"));
+                enfermeiros.add(enfermeiro);
+            }
+        }
+        return enfermeiros;
     }
 }

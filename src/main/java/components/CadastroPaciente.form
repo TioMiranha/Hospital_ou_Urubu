@@ -141,7 +141,7 @@
           <Font name="Times New Roman" size="12" style="3"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="Sem Pontos"/>
+        <Property name="toolTipText" type="java.lang.String" value="Informe apenas os n&#xfa;meros do CPF"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cpfCadastroPacienteActionPerformed"/>
@@ -188,6 +188,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Cadastrar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="textSobreNomeCadastro1">
       <Properties>

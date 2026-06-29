@@ -4,22 +4,20 @@
  */
 package models.Funcionarios;
 
-import models.Usuario;
-
 /**
  *
  * @author eduardo-silva
  */
 public class Enfermeiro extends Funcionario {
 
-    static String coren;
+    private String coren;
     
-    public static String getCoren() {
+    public String getCoren() {
         return coren;
     }
 
-    public static void setCoren(String coren) {
-        Enfermeiro.coren = coren;
+    public void setCoren(String coren) {
+        this.coren = coren;
     }
     
     public Enfermeiro(){};

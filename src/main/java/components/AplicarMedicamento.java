@@ -4,6 +4,19 @@
  */
 package components;
 
+import AtendimentoHospitalar.AplicacaoMedicamento;
+import AtendimentoHospitalar.Receita;
+import Conexao.AtendimentoHospitalarDAO;
+import java.awt.GridLayout;
+import java.time.LocalDateTime;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import models.Usuario;
+
 /**
  *
  * @author dpaiv
@@ -11,13 +24,24 @@ package components;
 public class AplicarMedicamento extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AplicarMedicamento.class.getName());
+    private final AtendimentoHospitalarDAO atendimentoDAO = new AtendimentoHospitalarDAO();
+    private Usuario enfermeiro;
 
     /**
      * Creates new form MenuMedico
      */
     public AplicarMedicamento(java.awt.Frame parent, boolean modal) {
+        this(parent, modal, null);
+    }
+
+    public AplicarMedicamento(java.awt.Frame parent, boolean modal, Usuario enfermeiro) {
         super(parent, modal);
         initComponents();
+        this.enfermeiro = enfermeiro;
+        cpfAplicarMedicamento.setEditable(false);
+        nomeAplicarMedicamento.setEditable(false);
+        idPacienteAplicarMedicamento.setEditable(false);
+        setLocationRelativeTo(parent);
     }
 
     /**
@@ -68,7 +92,7 @@ public class AplicarMedicamento extends javax.swing.JDialog {
         idPacienteAplicarMedicamento.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
 
         textFuncMenuDr5.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        textFuncMenuDr5.setText("ID Receita");
+        textFuncMenuDr5.setText("ID da receita");
 
         idAplicarMedicamento.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
         idAplicarMedicamento.addActionListener(this::idAplicarMedicamentoActionPerformed);
@@ -143,19 +167,137 @@ public class AplicarMedicamento extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        aplicarMedicamento();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void cpfAplicarMedicamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cpfAplicarMedicamentoActionPerformed
-        // TODO add your handling code here:
+        idAplicarMedicamento.requestFocusInWindow();
     }//GEN-LAST:event_cpfAplicarMedicamentoActionPerformed
 
     private void idAplicarMedicamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idAplicarMedicamentoActionPerformed
-        // TODO add your handling code here:
+        carregarReceita();
     }//GEN-LAST:event_idAplicarMedicamentoActionPerformed
     
-    
-    
+    private void carregarReceita() {
+        try {
+            Receita receita = buscarReceitaInformada();
+            preencherPaciente(receita);
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Receita localizada.\nPrescrição:\n" + receita.getPrescricao(),
+                    "Receita nº " + receita.getId(),
+                    JOptionPane.INFORMATION_MESSAGE);
+        } catch (NumberFormatException e) {
+            exibirAviso("ID da receita deve ser um número inteiro positivo.");
+        } catch (Exception e) {
+            exibirAviso(e.getMessage());
+        }
+    }
+
+    private void aplicarMedicamento() {
+        try {
+            Receita receita = buscarReceitaInformada();
+            preencherPaciente(receita);
+
+            JTextArea prescricao = new JTextArea(receita.getPrescricao(), 4, 30);
+            prescricao.setEditable(false);
+            prescricao.setLineWrap(true);
+            prescricao.setWrapStyleWord(true);
+
+            JTextField dosagem = new JTextField();
+            JTextField viaAplicacao = new JTextField();
+            JTextArea observacoes = new JTextArea(3, 30);
+            observacoes.setLineWrap(true);
+            observacoes.setWrapStyleWord(true);
+
+            JPanel formulario = new JPanel(new GridLayout(0, 1, 4, 4));
+            formulario.add(new JLabel("Prescrição médica:"));
+            formulario.add(new JScrollPane(prescricao));
+            formulario.add(new JLabel("Dosagem efetivamente aplicada:"));
+            formulario.add(dosagem);
+            formulario.add(new JLabel("Via de aplicação:"));
+            formulario.add(viaAplicacao);
+            formulario.add(new JLabel("Observações:"));
+            formulario.add(new JScrollPane(observacoes));
+
+            int opcao = JOptionPane.showConfirmDialog(
+                    this,
+                    formulario,
+                    "Confirmar aplicação da receita nº " + receita.getId(),
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.PLAIN_MESSAGE);
+
+            if (opcao != JOptionPane.OK_OPTION) {
+                return;
+            }
+
+            AplicacaoMedicamento aplicacao = new AplicacaoMedicamento();
+            aplicacao.setReceitaId(receita.getId());
+            aplicacao.setPacienteId(receita.getPacienteId());
+            aplicacao.setDosagemAplicada(dosagem.getText().trim());
+            aplicacao.setViaAplicacao(viaAplicacao.getText().trim());
+            aplicacao.setObservacoes(observacoes.getText().trim());
+            aplicacao.setDataAplicacao(LocalDateTime.now());
+
+            if (enfermeiro != null) {
+                aplicacao.setEnfermeiroId(enfermeiro.getFuncionarioId());
+            }
+
+            Integer idAplicacao = atendimentoDAO.salvarAplicacaoMedicamento(aplicacao);
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Aplicação nº " + idAplicacao + " registrada com sucesso.",
+                    "Medicamento aplicado",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            limparCampos();
+        } catch (NumberFormatException e) {
+            exibirAviso("ID da receita deve ser um número inteiro positivo.");
+        } catch (Exception e) {
+            exibirAviso(e.getMessage());
+        }
+    }
+
+    private Receita buscarReceitaInformada() throws Exception {
+        int receitaId = Integer.parseInt(idAplicarMedicamento.getText().trim());
+        if (receitaId <= 0) {
+            throw new NumberFormatException("ID inválido");
+        }
+
+        Receita receita = atendimentoDAO.buscarReceita(receitaId);
+        if (receita == null) {
+            throw new Exception("Receita não encontrada.");
+        }
+        if (!receita.isAplicarNoHospital()) {
+            throw new Exception("A receita não autoriza aplicação no hospital.");
+        }
+        return receita;
+    }
+
+    private void preencherPaciente(Receita receita) {
+        cpfAplicarMedicamento.setText(receita.getPacienteCpf());
+        nomeAplicarMedicamento.setText(receita.getPacienteNome());
+        idPacienteAplicarMedicamento.setText(String.valueOf(receita.getPacienteId()));
+    }
+
+    private void limparCampos() {
+        idAplicarMedicamento.setText("");
+        cpfAplicarMedicamento.setText("");
+        nomeAplicarMedicamento.setText("");
+        idPacienteAplicarMedicamento.setText("");
+        idAplicarMedicamento.requestFocusInWindow();
+    }
+
+    private void exibirAviso(String mensagem) {
+        JOptionPane.showMessageDialog(
+                this,
+                mensagem,
+                "Não foi possível aplicar o medicamento",
+                JOptionPane.WARNING_MESSAGE);
+    }
+
     /**
      * @param args the command line arguments
      */

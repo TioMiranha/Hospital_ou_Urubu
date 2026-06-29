@@ -4,6 +4,16 @@
  */
 package components;
 
+import Conexao.EnfermeiroDAO;
+import Conexao.MedicoDAO;
+import Conexao.PacienteDAO;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import models.Funcionarios.Enfermeiro;
+import models.Funcionarios.Medico;
+import models.Pacientes.Paciente;
+
 /**
  *
  * @author dpaiv
@@ -44,11 +54,17 @@ public class MenuListagem extends javax.swing.JDialog {
         jLabel1.setText("O que você quer listar?");
 
         tipoDeListaMenuListagem.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
-        tipoDeListaMenuListagem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos Médicos", "Todos Enfermeiros", "Todos Pacientes", "Diagnosticos/Recitas do paciente", " " }));
+        tipoDeListaMenuListagem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos Médicos", "Todos Enfermeiros", "Todos Pacientes", "Diagnósticos/Receitas do paciente" }));
         tipoDeListaMenuListagem.addActionListener(this::tipoDeListaMenuListagemActionPerformed);
 
         jButton1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jButton1.setText("Gerar");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
+        jButton1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton1KeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -90,8 +106,74 @@ public class MenuListagem extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tipoDeListaMenuListagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipoDeListaMenuListagemActionPerformed
-        // TODO add your handling code here:
+        jButton1.requestFocusInWindow();
     }//GEN-LAST:event_tipoDeListaMenuListagemActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        gerarListagem();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            evt.consume();
+            gerarListagem();
+        }
+    }//GEN-LAST:event_jButton1KeyPressed
+
+    private void gerarListagem() {
+        try {
+            gerarListagemDoBanco();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao gerar listagem: " + e.getMessage());
+        }
+    }
+
+    private void gerarListagemDoBanco() throws Exception {
+        String opcao = (String) tipoDeListaMenuListagem.getSelectedItem();
+
+        if ("Diagnósticos/Receitas do paciente".equals(opcao)) {
+            new ListarInfoPaciente(null, true).setVisible(true);
+            return;
+        }
+
+        StringBuilder texto = new StringBuilder();
+
+        if ("Todos Médicos".equals(opcao)) {
+            for (Medico medico : new MedicoDAO().listar()) {
+                texto.append("ID: ").append(medico.getId())
+                        .append(" | Nome: ").append(medico.getNome())
+                        .append(" | CRM: ").append(medico.getCrm())
+                        .append(" | Especialidade: ").append(medico.getEspecialidade())
+                        .append("\n");
+            }
+        } else if ("Todos Enfermeiros".equals(opcao)) {
+            for (Enfermeiro enfermeiro : new EnfermeiroDAO().listar()) {
+                texto.append("ID: ").append(enfermeiro.getId())
+                        .append(" | Nome: ").append(enfermeiro.getNome())
+                        .append(" | Coren: ").append(enfermeiro.getCoren())
+                        .append("\n");
+            }
+        } else if ("Todos Pacientes".equals(opcao)) {
+            for (Paciente paciente : new PacienteDAO().listar()) {
+                texto.append("ID: ").append(paciente.getId())
+                        .append(" | Nome: ").append(paciente.getNome())
+                        .append(" | CPF: ").append(paciente.getCpf())
+                        .append("\n");
+            }
+        }
+
+        if (texto.length() == 0) {
+            texto.append("Nenhum registro encontrado.");
+        }
+
+        JTextArea area = new JTextArea(texto.toString(), 15, 60);
+        area.setEditable(false);
+        JOptionPane.showMessageDialog(
+                this,
+                new JScrollPane(area),
+                "Listagem",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
 
     /**
      * @param args the command line arguments

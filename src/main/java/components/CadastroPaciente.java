@@ -64,7 +64,7 @@ public class CadastroPaciente extends javax.swing.JDialog {
 
         cpfCadastroPaciente.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
         cpfCadastroPaciente.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        cpfCadastroPaciente.setText("Sem Pontos");
+        cpfCadastroPaciente.setToolTipText("Informe apenas os números do CPF");
         cpfCadastroPaciente.addActionListener(this::cpfCadastroPacienteActionPerformed);
 
         textNomeCadastro.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
@@ -81,6 +81,7 @@ public class CadastroPaciente extends javax.swing.JDialog {
 
         jButton1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jButton1.setText("Cadastrar");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         textSobreNomeCadastro1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         textSobreNomeCadastro1.setText("Email");
@@ -180,20 +181,24 @@ public class CadastroPaciente extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void nomeCadastroPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nomeCadastroPacienteActionPerformed
-        // TODO add your handling code here:
+        telefoneCadastroPaciente.requestFocusInWindow();
     }//GEN-LAST:event_nomeCadastroPacienteActionPerformed
 
     private void cpfCadastroPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cpfCadastroPacienteActionPerformed
-        // TODO add your handling code here:
+        nomeCadastroPaciente.requestFocusInWindow();
     }//GEN-LAST:event_cpfCadastroPacienteActionPerformed
 
     private void dataNascimentoCadastoPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dataNascimentoCadastoPacienteActionPerformed
-        // TODO add your handling code here:
+        sexoComboBox.requestFocusInWindow();
     }//GEN-LAST:event_dataNascimentoCadastoPacienteActionPerformed
 
     private void sexoComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sexoComboBoxActionPerformed
-        // TODO add your handling code here:
+        jButton1.requestFocusInWindow();
     }//GEN-LAST:event_sexoComboBoxActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        cadastrarPaciente();
+    }//GEN-LAST:event_jButton1ActionPerformed
     
     private void limparCamposPaciente() {
         cpfCadastroPaciente.setText("");
@@ -205,11 +210,11 @@ public class CadastroPaciente extends javax.swing.JDialog {
         if (sexoComboBox.getItemCount() > 0) {
             sexoComboBox.setSelectedIndex(0);
         }
-}
+    }
     
     private void cadastrarPaciente() {
         try {
-            String cpf = cpfCadastroPaciente.getText().trim();
+        String cpf = cpfCadastroPaciente.getText().replaceAll("\\D", "");
         String nome = nomeCadastroPaciente.getText().trim();
         String telefone = telefoneCadastroPaciente.getText().trim();
         String email = emailCadastroPaciente.getText().trim();
@@ -220,8 +225,8 @@ public class CadastroPaciente extends javax.swing.JDialog {
             return;
         }
 
-        if (cpf.isEmpty()) {
-            JOptionPane.showMessageDialog(rootPane, "CPF é obrigatório.");
+        if (cpf.length() != 11) {
+            JOptionPane.showMessageDialog(rootPane, "CPF deve conter 11 dígitos.");
             return;
         }
 

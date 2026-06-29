@@ -13,9 +13,16 @@ import java.time.LocalDateTime;
  */
 public class Diagnostico {
     private int id;
+    private int pacienteId;
+    private Integer medicoId;
+    private String pacienteNome;
+    private String pacienteCpf;
     private String descricao;
     private String observacoes;
     private LocalDateTime dataDiagnostico;
+
+    public Diagnostico() {
+    }
 
     public Diagnostico(int id, String descricao, String observacoes, LocalDateTime dataDiagnostico) {
         this.id = id;
@@ -30,6 +37,38 @@ public class Diagnostico {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getPacienteId() {
+        return pacienteId;
+    }
+
+    public void setPacienteId(int pacienteId) {
+        this.pacienteId = pacienteId;
+    }
+
+    public Integer getMedicoId() {
+        return medicoId;
+    }
+
+    public void setMedicoId(Integer medicoId) {
+        this.medicoId = medicoId;
+    }
+
+    public String getPacienteNome() {
+        return pacienteNome;
+    }
+
+    public void setPacienteNome(String pacienteNome) {
+        this.pacienteNome = pacienteNome;
+    }
+
+    public String getPacienteCpf() {
+        return pacienteCpf;
+    }
+
+    public void setPacienteCpf(String pacienteCpf) {
+        this.pacienteCpf = pacienteCpf;
     }
 
     public String getDescricao() {

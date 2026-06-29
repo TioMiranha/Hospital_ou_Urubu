@@ -14,7 +14,7 @@ public class TestarConexao {
     public static void main(String[] args) {
         Conexao con = new Conexao();
         try {
-            Connection c = con.abrirConexao("localhost", "3306", "testizito","root","12345678");
+            Connection c = con.abrirConexao();
            System.out.println("Conexão ok");
            con.fecharConexao(c, null, null);
         }

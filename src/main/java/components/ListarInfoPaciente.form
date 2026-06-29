@@ -107,10 +107,9 @@
           <Font name="Times New Roman" size="12" style="3"/>
         </Property>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="3">
-            <StringItem index="0" value="Diagnosticos do paciente"/>
-            <StringItem index="1" value="Recitas do paciente"/>
-            <StringItem index="2" value=" "/>
+          <StringArray count="2">
+            <StringItem index="0" value="Diagn&#xf3;sticos do paciente"/>
+            <StringItem index="1" value="Receitas do paciente"/>
           </StringArray>
         </Property>
       </Properties>
@@ -127,6 +126,10 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Gerar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jButton1KeyPressed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>

@@ -21,6 +21,8 @@ public class MenuEnfermeiro extends javax.swing.JDialog {
     public MenuEnfermeiro(Usuario userEnf) {
         initComponents();
         this.userEnf = userEnf;
+        setLocationRelativeTo(null);
+        adicionarRetornoAoLogin();
     }
 
     /**
@@ -51,6 +53,7 @@ public class MenuEnfermeiro extends javax.swing.JDialog {
 
         jButton1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jButton1.setText("Ir");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -86,6 +89,31 @@ public class MenuEnfermeiro extends javax.swing.JDialog {
 
         setBounds(0, 0, 916, 509);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String funcionalidade =  funcionalidadeMenuEnfermeiro.getSelectedItem().toString();
+        if (funcionalidade == null) {
+            return;
+        }
+
+        switch (funcionalidade) {
+            case "Aplicar Medicamento" ->
+                new AplicarMedicamento(null, true, userEnf).setVisible(true);
+            case "Listar dados" ->
+                new MenuListagem(null, true).setVisible(true);
+            default -> {
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void adicionarRetornoAoLogin() {
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                new TelaLogin().setVisible(true);
+            }
+        });
+    }
 
     /**
      * @param args the command line arguments

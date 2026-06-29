@@ -15,13 +15,25 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class Conexao {
+
+    public Connection abrirConexao() throws Exception {
+        return abrirConexao(
+                "localhost",
+                "3306",
+                "hospital",
+                "root",
+                "12345678"
+        );
+    }
+
     public Connection abrirConexao(String servidor, String porta, String dataBase, String usuario, String senha) throws Exception {
         
         try {
         Class.forName("com.mysql.cj.jdbc.Driver");
         
         //Criar url da conexão
-        String url = "jdbc:mysql://"+servidor+":"+porta+"/"+dataBase+"?useTimezone=true&serverTimeZone=UTC";
+        String url = "jdbc:mysql://" + servidor + ":" + porta + "/" + dataBase
+                + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
         //Abre a conexão e devolve o resultado
         return DriverManager.getConnection(url, usuario, senha);
         } catch(Exception e) {
@@ -31,17 +43,38 @@ public class Conexao {
     }
     
     public void fecharConexao(Connection con, Statement stmt, ResultSet rs) throws Exception {
+        Exception erro = null;
+
         try {
-            if(rs != null){rs.close();}
-            else if(stmt != null) {stmt.close();}
-            else if(con != null){con.close();}
-    }catch(Exception e) {
-            throw new Exception(e.getMessage());
-    }
-    /*
-     Connection => Conexão com o DB
-        Statement => SQL a ser executado
-        ResultSet => resultado da execução do SQL
-        */
+            if (rs != null) {
+                rs.close();
+            }
+        } catch (Exception e) {
+            erro = e;
+        }
+
+        try {
+            if (stmt != null) {
+                stmt.close();
+            }
+        } catch (Exception e) {
+            if (erro == null) {
+                erro = e;
+            }
+        }
+
+        try {
+            if (con != null) {
+                con.close();
+            }
+        } catch (Exception e) {
+            if (erro == null) {
+                erro = e;
+            }
+        }
+
+        if (erro != null) {
+            throw new Exception(erro.getMessage(), erro);
+        }
     }
 }

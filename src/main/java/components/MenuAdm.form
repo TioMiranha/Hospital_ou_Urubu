@@ -92,7 +92,7 @@
             <StringItem index="1" value="Registrar Diagn&#xf3;stico"/>
             <StringItem index="2" value="Listar dados"/>
             <StringItem index="3" value="Cadastrar Paciente"/>
-            <StringItem index="4" value="Registra Receita"/>
+            <StringItem index="4" value="Registrar Receita"/>
           </StringArray>
         </Property>
       </Properties>
@@ -108,6 +108,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Ir"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

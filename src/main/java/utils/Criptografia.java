@@ -30,8 +30,6 @@ public class Criptografia {
             
             resultado = builder.toString();
             
-            System.out.println(resultado);
-            
             return resultado;
         }catch(Exception e) {
             JOptionPane.showMessageDialog(null, "error:" + e);

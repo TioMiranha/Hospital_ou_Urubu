@@ -32,6 +32,7 @@ public class Cadastro extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
+        atualizarCamposPorTipo();
     }
      
     private void cadastrarUsuario() {
@@ -41,8 +42,15 @@ public class Cadastro extends javax.swing.JDialog {
         String telefone = telefoneCadastroUsu.getText().trim();
         String email = emailCadastroUsu.getText().trim();
 
+        cpf = cpf.replaceAll("\\D", "");
+
         if (nome.isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "Nome é obrigatório.");
+            return;
+        }
+
+        if (cpf.length() != 11) {
+            JOptionPane.showMessageDialog(rootPane, "CPF deve conter 11 dígitos.");
             return;
         }
 
@@ -66,6 +74,11 @@ public class Cadastro extends javax.swing.JDialog {
 
             String especialidade = especialidadeCadastroUsu.getText().trim();
             String crm = crmCadastroUsu.getText().trim();
+
+            if (crm.isEmpty() || especialidade.isEmpty()) {
+                JOptionPane.showMessageDialog(rootPane, "CRM e especialidade são obrigatórios para médicos.");
+                return;
+            }
 
             Medico med = new Medico();
 
@@ -97,6 +110,11 @@ public class Cadastro extends javax.swing.JDialog {
         } else if (userType.equals("Enfermeiro")) {
 
             String coren = corenCadastroUsu.getText().trim();
+
+            if (coren.isEmpty()) {
+                JOptionPane.showMessageDialog(rootPane, "Coren é obrigatório para enfermeiros.");
+                return;
+            }
 
             Enfermeiro enf = new Enfermeiro();
 
@@ -176,7 +194,7 @@ public class Cadastro extends javax.swing.JDialog {
 
         cpfCadastroUsu.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
         cpfCadastroUsu.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        cpfCadastroUsu.setText("Sem Pontos");
+        cpfCadastroUsu.setToolTipText("Informe apenas os números do CPF");
         cpfCadastroUsu.addActionListener(this::cpfCadastroUsuActionPerformed);
         cpfCadastroUsu.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -218,6 +236,7 @@ public class Cadastro extends javax.swing.JDialog {
 
         jButton1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jButton1.setText("Cadastrar");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
         jButton1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jButton1KeyPressed(evt);
@@ -242,7 +261,7 @@ public class Cadastro extends javax.swing.JDialog {
         textSobreNomeCadastro3.setText("Coren");
 
         crmCadastroUsu.setFont(new java.awt.Font("Times New Roman", 2, 12)); // NOI18N
-        crmCadastroUsu.setText("APENAS PARA MÉDICOS");
+        crmCadastroUsu.setToolTipText("Preencha apenas para médicos");
         crmCadastroUsu.addActionListener(this::crmCadastroUsuActionPerformed);
         crmCadastroUsu.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -251,7 +270,7 @@ public class Cadastro extends javax.swing.JDialog {
         });
 
         corenCadastroUsu.setFont(new java.awt.Font("Times New Roman", 2, 12)); // NOI18N
-        corenCadastroUsu.setText("APENAS PARA ENFERMEIROS");
+        corenCadastroUsu.setToolTipText("Preencha apenas para enfermeiros");
         corenCadastroUsu.addActionListener(this::corenCadastroUsuActionPerformed);
         corenCadastroUsu.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -263,7 +282,7 @@ public class Cadastro extends javax.swing.JDialog {
         textSobreNomeCadastro4.setText("Especialidade");
 
         especialidadeCadastroUsu.setFont(new java.awt.Font("Times New Roman", 2, 12)); // NOI18N
-        especialidadeCadastroUsu.setText("APENAS PARA MÉDICOS");
+        especialidadeCadastroUsu.setToolTipText("Preencha apenas para médicos");
         especialidadeCadastroUsu.addActionListener(this::especialidadeCadastroUsuActionPerformed);
         especialidadeCadastroUsu.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -369,80 +388,102 @@ public class Cadastro extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void nomeCadastroUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nomeCadastroUsuActionPerformed
-       
+        telefoneCadastroUsu.requestFocusInWindow();
     }//GEN-LAST:event_nomeCadastroUsuActionPerformed
 
     private void cpfCadastroUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cpfCadastroUsuActionPerformed
-        // TODO add your handling code here:
+        nomeCadastroUsu.requestFocusInWindow();
     }//GEN-LAST:event_cpfCadastroUsuActionPerformed
 
     private void tipoUsuarioCadastroUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipoUsuarioCadastroUsuActionPerformed
-        // TODO add your handling code here:
+        atualizarCamposPorTipo();
     }//GEN-LAST:event_tipoUsuarioCadastroUsuActionPerformed
 
     private void telefoneCadastroUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_telefoneCadastroUsuActionPerformed
-        // TODO add your handling code here:
+        emailCadastroUsu.requestFocusInWindow();
     }//GEN-LAST:event_telefoneCadastroUsuActionPerformed
 
     private void emailCadastroUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailCadastroUsuActionPerformed
-        // TODO add your handling code here:
+        if ("Medico".equals(tipoUsuarioCadastroUsu.getSelectedItem())) {
+            especialidadeCadastroUsu.requestFocusInWindow();
+        } else {
+            corenCadastroUsu.requestFocusInWindow();
+        }
     }//GEN-LAST:event_emailCadastroUsuActionPerformed
 
     private void especialidadeCadastroUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_especialidadeCadastroUsuActionPerformed
-        // TODO add your handling code here:
+        crmCadastroUsu.requestFocusInWindow();
     }//GEN-LAST:event_especialidadeCadastroUsuActionPerformed
 
     private void crmCadastroUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crmCadastroUsuActionPerformed
-        // TODO add your handling code here:
+        jButton1.requestFocusInWindow();
     }//GEN-LAST:event_crmCadastroUsuActionPerformed
 
     private void corenCadastroUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_corenCadastroUsuActionPerformed
-        // TODO add your handling code here:
+        jButton1.requestFocusInWindow();
     }//GEN-LAST:event_corenCadastroUsuActionPerformed
 
     private void tipoUsuarioCadastroUsuKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tipoUsuarioCadastroUsuKeyPressed
-        // TODO add your handling code here:
+        if(evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER)
+            cpfCadastroUsu.requestFocusInWindow();
     }//GEN-LAST:event_tipoUsuarioCadastroUsuKeyPressed
 
     private void cpfCadastroUsuKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cpfCadastroUsuKeyPressed
         if(evt.getKeyCode() == 10)
-            cadastrarUsuario();
+            nomeCadastroUsu.requestFocusInWindow();
     }//GEN-LAST:event_cpfCadastroUsuKeyPressed
 
     private void nomeCadastroUsuKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nomeCadastroUsuKeyPressed
          if(evt.getKeyCode() == 10)
-            cadastrarUsuario();
+            telefoneCadastroUsu.requestFocusInWindow();
     }//GEN-LAST:event_nomeCadastroUsuKeyPressed
 
     private void telefoneCadastroUsuKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_telefoneCadastroUsuKeyPressed
          if(evt.getKeyCode() == 10)
-            cadastrarUsuario();
+            emailCadastroUsu.requestFocusInWindow();
     }//GEN-LAST:event_telefoneCadastroUsuKeyPressed
 
     private void emailCadastroUsuKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_emailCadastroUsuKeyPressed
-        if(evt.getKeyCode() == 10)
-            cadastrarUsuario();
+        if(evt.getKeyCode() == 10) {
+            if ("Medico".equals(tipoUsuarioCadastroUsu.getSelectedItem()))
+                especialidadeCadastroUsu.requestFocusInWindow();
+            else
+                corenCadastroUsu.requestFocusInWindow();
+        }
     }//GEN-LAST:event_emailCadastroUsuKeyPressed
 
     private void especialidadeCadastroUsuKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_especialidadeCadastroUsuKeyPressed
          if(evt.getKeyCode() == 10)
-            cadastrarUsuario();
+            crmCadastroUsu.requestFocusInWindow();
     }//GEN-LAST:event_especialidadeCadastroUsuKeyPressed
 
     private void crmCadastroUsuKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_crmCadastroUsuKeyPressed
         if(evt.getKeyCode() == 10)
-            cadastrarUsuario();
+            jButton1.requestFocusInWindow();
     }//GEN-LAST:event_crmCadastroUsuKeyPressed
 
     private void corenCadastroUsuKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_corenCadastroUsuKeyPressed
          if(evt.getKeyCode() == 10)
-            cadastrarUsuario();
+            jButton1.requestFocusInWindow();
     }//GEN-LAST:event_corenCadastroUsuKeyPressed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        cadastrarUsuario();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     private void jButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyPressed
-         if(evt.getKeyCode() == 10)
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            evt.consume();
             cadastrarUsuario();
+        }
     }//GEN-LAST:event_jButton1KeyPressed
+
+    private void atualizarCamposPorTipo() {
+        boolean medico = "Medico".equals(tipoUsuarioCadastroUsu.getSelectedItem());
+        crmCadastroUsu.setEnabled(medico);
+        especialidadeCadastroUsu.setEnabled(medico);
+        corenCadastroUsu.setEnabled(!medico);
+    }
 
     /**
      * @param args the command line arguments

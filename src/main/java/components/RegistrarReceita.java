@@ -4,7 +4,13 @@
  */
 package components;
 
-import AtendimentoHospitalar.AplicacaoMedicamento;
+import AtendimentoHospitalar.Receita;
+import Conexao.AtendimentoHospitalarDAO;
+import Conexao.PacienteDAO;
+import java.time.LocalDateTime;
+import javax.swing.JOptionPane;
+import models.Pacientes.Paciente;
+import models.Usuario;
 
 /**
  *
@@ -13,13 +19,22 @@ import AtendimentoHospitalar.AplicacaoMedicamento;
 public class RegistrarReceita extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RegistrarReceita.class.getName());
+    private final AtendimentoHospitalarDAO atendimentoDAO = new AtendimentoHospitalarDAO();
+    private final PacienteDAO pacienteDAO = new PacienteDAO();
+    private Usuario medico;
 
     /**
      * Creates new form MenuMedico
      */
     public RegistrarReceita(java.awt.Frame parent, boolean modal) {
+        this(parent, modal, null);
+    }
+
+    public RegistrarReceita(java.awt.Frame parent, boolean modal, Usuario medico) {
         super(parent, modal);
         initComponents();
+        this.medico = medico;
+        setLocationRelativeTo(parent);
     }
 
     /**
@@ -49,7 +64,7 @@ public class RegistrarReceita extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         txtDrMenu.setFont(new java.awt.Font("Rockwell Condensed", 0, 36)); // NOI18N
-        txtDrMenu.setText("Registrar Recita");
+        txtDrMenu.setText("Registrar Receita");
         txtDrMenu.setToolTipText("");
 
         textFuncMenuDr.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
@@ -83,7 +98,7 @@ public class RegistrarReceita extends javax.swing.JDialog {
         textFuncMenuDr4.setText("Aplicar no hospital?");
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
-        jLabel1.setText("Caso tenha algum medicamento enjetavel");
+        jLabel1.setText("Caso haja medicamento injetável");
 
         jRadioButton1.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jRadioButton1.setText("Sim");
@@ -166,18 +181,97 @@ public class RegistrarReceita extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        registrarReceita();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
-        // TODO add your handling code here:
+        ReceitaRegistrarReceita.requestFocusInWindow();
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
     private void idRegistrarReceitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idRegistrarReceitaActionPerformed
-        // TODO add your handling code here:
+        ReceitaRegistrarReceita.requestFocusInWindow();
     }//GEN-LAST:event_idRegistrarReceitaActionPerformed
     
-    
+    private void registrarReceita() {
+        try {
+            Paciente paciente = buscarPaciente();
+
+            Receita receita = new Receita();
+            receita.setPacienteId(paciente.getId());
+            receita.setPacienteCpf(paciente.getCpf());
+            receita.setPacienteNome(paciente.getNome());
+            receita.setPrescricao(ReceitaRegistrarReceita.getText().trim());
+            receita.setAplicarNoHospital(jRadioButton1.isSelected());
+            receita.setDataEmissao(LocalDateTime.now());
+
+            if (medico != null) {
+                receita.setMedicoId(medico.getFuncionarioId());
+            }
+
+            Integer idReceita = atendimentoDAO.salvarReceita(receita);
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Receita nº " + idReceita
+                            + " registrada com sucesso."
+                            + (receita.isAplicarNoHospital()
+                                    ? "\nEla está disponível para aplicação no hospital."
+                                    : ""),
+                    "Receita registrada",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            limparCampos();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "ID do paciente deve ser um número inteiro positivo.",
+                    "Dados inválidos",
+                    JOptionPane.WARNING_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    e.getMessage(),
+                    "Não foi possível registrar a receita",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private int converterIdPaciente() {
+        int pacienteId = Integer.parseInt(idRegistrarReceita.getText().trim());
+        if (pacienteId <= 0) {
+            throw new NumberFormatException("ID inválido");
+        }
+        return pacienteId;
+    }
+
+    private Paciente buscarPaciente() throws Exception {
+        Paciente paciente = pacienteDAO.buscar(converterIdPaciente());
+        if (paciente == null) {
+            throw new Exception("Paciente não encontrado.");
+        }
+
+        String cpf = cpfRegistrarReceita.getText().replaceAll("\\D", "");
+        if (!paciente.getCpf().equals(cpf)) {
+            throw new Exception("O CPF não pertence ao paciente informado.");
+        }
+
+        String nome = nomeRegistrarReceita.getText().trim();
+        if (!paciente.getNome().equalsIgnoreCase(nome)) {
+            throw new Exception("O nome não pertence ao paciente informado.");
+        }
+
+        return paciente;
+    }
+
+    private void limparCampos() {
+        cpfRegistrarReceita.setText("");
+        nomeRegistrarReceita.setText("");
+        idRegistrarReceita.setText("");
+        ReceitaRegistrarReceita.setText("");
+        jRadioButton1.setSelected(false);
+        cpfRegistrarReceita.requestFocusInWindow();
+    }
+
     /**
      * @param args the command line arguments
      */

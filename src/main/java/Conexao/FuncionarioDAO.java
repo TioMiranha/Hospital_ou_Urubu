@@ -1,72 +1,50 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Conexao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import models.Funcionarios.Funcionario;
-import models.Funcionarios.Medico;
-import utils.Criptografia;
 
-/**
- *
- * @author eduardo-silva
- */
 public class FuncionarioDAO {
 
-    public Integer salvar(Funcionario func) throws Exception {
-        if (func == null) {
-            throw new Exception("Erro: dados do funcionário vazio.");
-        }
+    public Integer salvar(Funcionario funcionario) throws Exception {
+        String sql = "INSERT INTO funcionarios (nome, cpf, telefone) VALUES (?, ?, ?)";
 
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        Conexao conexao = new Conexao();
-
-        try {
-            con = conexao.abrirConexao(
-                "localhost",
-                "3306",
-                "testizito",
-                "root",
-                "12345678"
-            );
-
-            System.out.println("Conexão ok");
-
-            String sql = """
-                INSERT INTO funcionarios 
-                (nome, cpf, telefone) 
-                VALUES (?, ?, ?)
-            """;
-
-            ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-
-            ps.setString(1, func.getNome());
-            ps.setString(2, func.getCpf());
-            ps.setString(3, func.getTelefone());
-
+        try (Connection con = new Conexao().abrirConexao();
+             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, funcionario.getNome());
+            ps.setString(2, funcionario.getCpf());
+            ps.setString(3, funcionario.getTelefone());
             ps.executeUpdate();
 
-            rs = ps.getGeneratedKeys();
-
-            if (rs.next()) {
-                Integer idGerado = rs.getInt(1);
-                func.setId(idGerado);
-                return idGerado;
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    funcionario.setId(rs.getInt(1));
+                    return funcionario.getId();
+                }
             }
-
-            throw new Exception("Erro ao obter o ID gerado.");
-
-        } catch (Exception e) {
-            throw new Exception("Erro ao salvar funcionário: " + e.getMessage());
-        } finally {
-            conexao.fecharConexao(con, ps, rs);
         }
+        throw new Exception("Não foi possível cadastrar o funcionário.");
+    }
+
+    public ArrayList<Funcionario> listar() throws Exception {
+        ArrayList<Funcionario> funcionarios = new ArrayList<>();
+        String sql = "SELECT * FROM funcionarios ORDER BY nome";
+
+        try (Connection con = new Conexao().abrirConexao();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Funcionario funcionario = new Funcionario();
+                funcionario.setId(rs.getInt("id"));
+                funcionario.setNome(rs.getString("nome"));
+                funcionario.setCpf(rs.getString("cpf"));
+                funcionario.setTelefone(rs.getString("telefone"));
+                funcionarios.add(funcionario);
+            }
+        }
+        return funcionarios;
     }
 }

@@ -4,7 +4,6 @@
  */
 package AtendimentoHospitalar;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -13,9 +12,12 @@ import java.time.LocalDateTime;
  */
 public class AplicacaoMedicamento {
     private int id;
+    private int receitaId;
+    private int pacienteId;
+    private Integer enfermeiroId;
     private String dosagemAplicada;
     private String viaAplicacao;
-    private LocalDate dataAplicacao;
+    private LocalDateTime dataAplicacao;
     private String observacoes;
 
     public int getId() {
@@ -24,6 +26,30 @@ public class AplicacaoMedicamento {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getReceitaId() {
+        return receitaId;
+    }
+
+    public void setReceitaId(int receitaId) {
+        this.receitaId = receitaId;
+    }
+
+    public int getPacienteId() {
+        return pacienteId;
+    }
+
+    public void setPacienteId(int pacienteId) {
+        this.pacienteId = pacienteId;
+    }
+
+    public Integer getEnfermeiroId() {
+        return enfermeiroId;
+    }
+
+    public void setEnfermeiroId(Integer enfermeiroId) {
+        this.enfermeiroId = enfermeiroId;
     }
 
     public String getDosagemAplicada() {
@@ -42,11 +68,11 @@ public class AplicacaoMedicamento {
         this.viaAplicacao = viaAplicacao;
     }
 
-    public LocalDate getDataAplicacao() {
+    public LocalDateTime getDataAplicacao() {
         return dataAplicacao;
     }
 
-    public void setDataAplicacao(LocalDate dataAplicacao) {
+    public void setDataAplicacao(LocalDateTime dataAplicacao) {
         this.dataAplicacao = dataAplicacao;
     }
 
@@ -58,10 +84,22 @@ public class AplicacaoMedicamento {
         this.observacoes = observacoes;
     }
     
-    public AplicacaoMedicamento(){};
+    public AplicacaoMedicamento() {
+    }
     
-    public AplicacaoMedicamento(int id, String dosagemAplicada, String viaAplicacao, LocalDate dataAplicacao, String observacoes) {
+    public AplicacaoMedicamento(
+            int id,
+            int receitaId,
+            int pacienteId,
+            Integer enfermeiroId,
+            String dosagemAplicada,
+            String viaAplicacao,
+            LocalDateTime dataAplicacao,
+            String observacoes) {
         this.id = id;
+        this.receitaId = receitaId;
+        this.pacienteId = pacienteId;
+        this.enfermeiroId = enfermeiroId;
         this.dosagemAplicada = dosagemAplicada;
         this.viaAplicacao = viaAplicacao;
         this.dataAplicacao = dataAplicacao;

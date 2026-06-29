@@ -172,7 +172,7 @@
           <Font name="Times New Roman" size="12" style="3"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="Sem Pontos"/>
+        <Property name="toolTipText" type="java.lang.String" value="Informe apenas os n&#xfa;meros do CPF"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cpfCadastroUsuActionPerformed"/>
@@ -246,6 +246,7 @@
         <Property name="text" type="java.lang.String" value="Cadastrar"/>
       </Properties>
       <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jButton1KeyPressed"/>
       </Events>
     </Component>
@@ -289,7 +290,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Times New Roman" size="12" style="2"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="APENAS PARA M&#xc9;DICOS"/>
+        <Property name="toolTipText" type="java.lang.String" value="Preencha apenas para m&#xe9;dicos"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="crmCadastroUsuActionPerformed"/>
@@ -301,7 +302,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Times New Roman" size="12" style="2"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="APENAS PARA ENFERMEIROS"/>
+        <Property name="toolTipText" type="java.lang.String" value="Preencha apenas para enfermeiros"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="corenCadastroUsuActionPerformed"/>
@@ -321,7 +322,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Times New Roman" size="12" style="2"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="APENAS PARA M&#xc9;DICOS"/>
+        <Property name="toolTipText" type="java.lang.String" value="Preencha apenas para m&#xe9;dicos"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="especialidadeCadastroUsuActionPerformed"/>

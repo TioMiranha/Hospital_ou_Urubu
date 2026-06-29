@@ -5,24 +5,27 @@
 package components;
 
 import Conexao.UsuarioDAO;
+import java.util.Arrays;
 import javax.swing.JOptionPane;
 import models.Usuario;
+import utils.Criptografia;
 
 /**
  *
  * @author eduardo-silva
  */
 public class TrocarSenha extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TrocarSenha.class.getName());
-    UsuarioDAO userChangeHashPass = new UsuarioDAO();
-    Usuario u = new Usuario();
+    private final UsuarioDAO userChangeHashPass = new UsuarioDAO();
+    private Usuario u;
     /**
      * Creates new form TrocarSenha
      */
     public TrocarSenha(Usuario u) {
         initComponents();
         this.u = u;
+        getRootPane().setDefaultButton(trocarSenha);
     }
 
     /**
@@ -55,6 +58,7 @@ public class TrocarSenha extends javax.swing.JFrame {
 
         trocarSenha.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         trocarSenha.setText("Trocar");
+        trocarSenha.addActionListener(this::trocarSenhaActionPerformed);
         trocarSenha.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 trocarSenhaKeyPressed(evt);
@@ -115,25 +119,24 @@ public class TrocarSenha extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void inputTrocarSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputTrocarSenhaActionPerformed
-        // TODO add your handling code here:
+        alterarSenha();
     }//GEN-LAST:event_inputTrocarSenhaActionPerformed
 
+    private void trocarSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_trocarSenhaActionPerformed
+        alterarSenha();
+    }//GEN-LAST:event_trocarSenhaActionPerformed
+
     private void inputTrocarSenhaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inputTrocarSenhaKeyPressed
-        if(evt.getKeyCode() == 10)
-           try {
-               userChangeHashPass.ChangeUserPassword(u);
-        } catch (Exception ex) {
-            System.getLogger(TrocarSenha.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            evt.consume();
+            alterarSenha();
         }
-         
     }//GEN-LAST:event_inputTrocarSenhaKeyPressed
 
     private void trocarSenhaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_trocarSenhaKeyPressed
-       if(evt.getKeyCode() == 10)
-           try {
-               userChangeHashPass.ChangeUserPassword(u);
-        } catch (Exception ex) {
-            System.getLogger(TrocarSenha.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            evt.consume();
+            alterarSenha();
         }
     }//GEN-LAST:event_trocarSenhaKeyPressed
 
@@ -144,22 +147,58 @@ public class TrocarSenha extends javax.swing.JFrame {
             inputTrocarSenha.setEchoChar('*');
     }//GEN-LAST:event_checkMostrarSenhaActionPerformed
 
+    private void FinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FinalizarActionPerformed
+        voltarParaLogin();
+    }//GEN-LAST:event_FinalizarActionPerformed
+
     private void FinalizarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_FinalizarKeyPressed
-        // TODO add your handling code here:
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            evt.consume();
+            voltarParaLogin();
+        }
     }//GEN-LAST:event_FinalizarKeyPressed
 
-    private void FinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FinalizarActionPerformed
-        TelaLogin tLogin = null;
-        try {
-            tLogin = new TelaLogin();
-        } catch (Exception ex) {
-            System.getLogger(TrocarSenha.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+    private void alterarSenha() {
+        if (u == null || u.getId() <= 0) {
+            JOptionPane.showMessageDialog(this, "Usuário inválido para alteração de senha.");
+            return;
         }
-        tLogin.setVisible(true);
+
+        char[] novaSenha = inputTrocarSenha.getPassword();
+        try {
+            if (novaSenha.length < 4) {
+                JOptionPane.showMessageDialog(this, "A nova senha deve ter pelo menos 4 caracteres.");
+                inputTrocarSenha.requestFocusInWindow();
+                return;
+            }
+
+            String senhaHash = new Criptografia().criptografar(novaSenha);
+            if (senhaHash == null) {
+                throw new Exception("Não foi possível processar a nova senha.");
+            }
+
+            u.setSenhaHash(senhaHash);
+            userChangeHashPass.ChangeUserPassword(u);
+            u.setDeveTrocarSenha(false);
+            inputTrocarSenha.setText("");
+
+            JOptionPane.showMessageDialog(this, "Senha alterada com sucesso.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao alterar senha: " + ex.getMessage());
+        } finally {
+            Arrays.fill(novaSenha, '\0');
+        }
+    }
+
+    private void voltarParaLogin() {
+        if (u == null || Boolean.TRUE.equals(u.getDeveTrocarSenha())) {
+            JOptionPane.showMessageDialog(this, "Altere a senha antes de finalizar.");
+            return;
+        }
+
+        new TelaLogin().setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_FinalizarActionPerformed
-    
-  
+    }
     
     /**
      * @param args the command line arguments

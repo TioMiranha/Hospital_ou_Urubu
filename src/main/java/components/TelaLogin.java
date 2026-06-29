@@ -5,7 +5,7 @@
 package components;
 
 import Conexao.UsuarioDAO;
-import Main.Main;
+import java.util.Arrays;
 import javax.swing.JOptionPane;
 import models.Usuario;
 import utils.Criptografia;
@@ -21,9 +21,17 @@ public class TelaLogin extends javax.swing.JFrame {
     /**
      * Creates new form TelaLogin
      */
-    public TelaLogin() throws Exception {
+    public TelaLogin() {
         initComponents();
-        criarAdminInicial();
+        getRootPane().setDefaultButton(jButton1);
+        try {
+            criarAdminInicial();
+        } catch (Exception ex) {
+            logger.log(
+                    java.util.logging.Level.FINE,
+                    "Inicialização do administrador adiada até o banco estar disponível.",
+                    ex);
+        }
     }
 
     /**
@@ -142,30 +150,37 @@ public class TelaLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        Logar();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void usuarioLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuarioLoginActionPerformed
-        // TODO add your handling code here:
+        senhaUsuarioLogin.requestFocusInWindow();
     }//GEN-LAST:event_usuarioLoginActionPerformed
 
     private void senhaUsuarioLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_senhaUsuarioLoginActionPerformed
-        // TODO add your handling code here:
+        Logar();
     }//GEN-LAST:event_senhaUsuarioLoginActionPerformed
 
     private void usuarioLoginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usuarioLoginKeyPressed
-        if(evt.getKeyCode() == 10)
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            evt.consume();
             Logar();
+        }
     }//GEN-LAST:event_usuarioLoginKeyPressed
 
     private void senhaUsuarioLoginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_senhaUsuarioLoginKeyPressed
-        if(evt.getKeyCode() == 10)
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            evt.consume();
             Logar();
+        }
     }//GEN-LAST:event_senhaUsuarioLoginKeyPressed
 
     private void jButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyPressed
-        if(evt.getKeyCode() == 10)
-            Logar();    }//GEN-LAST:event_jButton1KeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            evt.consume();
+            Logar();
+        }
+    }//GEN-LAST:event_jButton1KeyPressed
 
     private void boxMostrarSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxMostrarSenhaActionPerformed
        if(boxMostrarSenha.isSelected())
@@ -176,54 +191,64 @@ public class TelaLogin extends javax.swing.JFrame {
     
    private void Logar()
     {
-        if(usuarioLogin.getText().length() < 3 || usuarioLogin.getText().equals(""))
-        {   
-              JOptionPane.showMessageDialog(this, "Email de Usuario invalido");
+        String login = usuarioLogin.getText().trim();
+        char[] senha = senhaUsuarioLogin.getPassword();
+
+        if (login.length() < 3) {
+            JOptionPane.showMessageDialog(this, "Email de usuário inválido.");
+            usuarioLogin.requestFocusInWindow();
+            return;
         }
         
-        if(senhaUsuarioLogin.getPassword().length < 3 || senhaUsuarioLogin.getPassword().equals(""))
-        {
-            JOptionPane.showMessageDialog(this, "Senha do Usuario invalida");
+        if (senha.length < 3) {
+            JOptionPane.showMessageDialog(this, "Senha do usuário inválida.");
+            senhaUsuarioLogin.requestFocusInWindow();
+            Arrays.fill(senha, '\0');
+            return;
         }
-        
         
         try {
             Criptografia crip = new Criptografia();
-            String HashedPassword = crip.criptografar(senhaUsuarioLogin.getPassword());
+            String hashedPassword = crip.criptografar(senha);
             UsuarioDAO dao = new UsuarioDAO();
-            Usuario user = dao.Autenticar(usuarioLogin.getText(), HashedPassword);
-            if(user == null) {
+            Usuario user = dao.Autenticar(login, hashedPassword);
+            if (user == null) {
                 JOptionPane.showMessageDialog(this, "Erro: Credencial inválida");
+                return;
             }
-            else {
-                if(user.getDeveTrocarSenha())
-                {
-                        TrocarSenha telaTrocarSenha = new TrocarSenha(user);
-                        telaTrocarSenha.setVisible(true);
-                        this.dispose();
-                }
-                
-                if(user.getPerfil().equals("Medico"))
-                {
+
+            if (Boolean.TRUE.equals(user.getDeveTrocarSenha())) {
+                TrocarSenha telaTrocarSenha = new TrocarSenha(user);
+                telaTrocarSenha.setVisible(true);
+                this.dispose();
+                return;
+            }
+
+            String perfil = user.getPerfil();
+            if (perfil == null) {
+                JOptionPane.showMessageDialog(this, "Usuário sem perfil de acesso.");
+                return;
+            }
+
+            if (perfil.equalsIgnoreCase("Medico")) {
                 MenuMedico telaMedico = new MenuMedico(user);
                 telaMedico.setVisible(true);
                 this.dispose();
-                }
-                else if(user.getPerfil().equals("Enfermeiro"))
-                {
-                    MenuEnfermeiro telaEnfermeiro = new MenuEnfermeiro(user);
-                    telaEnfermeiro.setVisible(true);
-                    this.dispose();
-                }
-                else if(user.getPerfil().equals("Admin"))
-                {
-                    MenuAdm telaEnfermeiro = new MenuAdm(user);
-                    telaEnfermeiro.setVisible(true);
-                    this.dispose();
-                }
+            } else if (perfil.equalsIgnoreCase("Enfermeiro")) {
+                MenuEnfermeiro telaEnfermeiro = new MenuEnfermeiro(user);
+                telaEnfermeiro.setVisible(true);
+                this.dispose();
+            } else if (perfil.equalsIgnoreCase("Admin")) {
+                MenuAdm telaAdmin = new MenuAdm(user);
+                telaAdmin.setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Perfil de acesso desconhecido: " + perfil);
             }
         } catch(Exception e) {
             JOptionPane.showMessageDialog(this, "Erro: "+ e.getMessage());
+        } finally {
+            Arrays.fill(senha, '\0');
         }
         
     }

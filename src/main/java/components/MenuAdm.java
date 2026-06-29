@@ -20,6 +20,8 @@ public class MenuAdm extends javax.swing.JDialog {
     public MenuAdm(Usuario userAdmin) {
         initComponents();
         this.userAdmin = userAdmin;
+        setLocationRelativeTo(null);
+        adicionarRetornoAoLogin();
     }
 
     /**
@@ -46,10 +48,11 @@ public class MenuAdm extends javax.swing.JDialog {
         textFuncMenuDr.setText("Escolha a funcionalidade");
 
         funcionalidadeMenuADM.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
-        funcionalidadeMenuADM.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cadastrar Funcionario", "Registrar Diagnóstico", "Listar dados", "Cadastrar Paciente", "Registra Receita" }));
+        funcionalidadeMenuADM.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cadastrar Funcionario", "Registrar Diagnóstico", "Listar dados", "Cadastrar Paciente", "Registrar Receita" }));
 
         jButton1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jButton1.setText("Ir");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -85,6 +88,37 @@ public class MenuAdm extends javax.swing.JDialog {
 
         setBounds(0, 0, 916, 509);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String funcionalidade = funcionalidadeMenuADM.getSelectedItem().toString();
+        if (funcionalidade == null) {
+            return;
+        }
+
+        switch (funcionalidade) {
+            case "Cadastrar Funcionario" ->
+                new Cadastro(null, true).setVisible(true);
+            case "Registrar Diagnóstico" ->
+                new RegistrarDiagnostico(null, true).setVisible(true);
+            case "Listar dados" ->
+                new MenuListagem(null, true).setVisible(true);
+            case "Cadastrar Paciente" ->
+                new CadastroPaciente(null, true).setVisible(true);
+            case "Registrar Receita" ->
+                new RegistrarReceita(null, true).setVisible(true);
+            default -> {
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void adicionarRetornoAoLogin() {
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                new TelaLogin().setVisible(true);
+            }
+        });
+    }
 
     /**
      * @param args the command line arguments

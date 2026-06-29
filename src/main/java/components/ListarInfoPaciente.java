@@ -4,6 +4,15 @@
  */
 package components;
 
+import AtendimentoHospitalar.Diagnostico;
+import AtendimentoHospitalar.Receita;
+import Conexao.AtendimentoHospitalarDAO;
+import Conexao.PacienteDAO;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import models.Pacientes.Paciente;
+
 /**
  *
  * @author dpaiv
@@ -48,10 +57,16 @@ public class ListarInfoPaciente extends javax.swing.JDialog {
         jLabel1.setText("O que você quer listar?");
 
         tipoDeListaListarInfoPaciente.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
-        tipoDeListaListarInfoPaciente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Diagnosticos do paciente", "Recitas do paciente", " " }));
+        tipoDeListaListarInfoPaciente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Diagnósticos do paciente", "Receitas do paciente" }));
 
         jButton1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jButton1.setText("Gerar");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
+        jButton1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton1KeyPressed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel3.setText("CPF do paciente");
@@ -117,6 +132,85 @@ public class ListarInfoPaciente extends javax.swing.JDialog {
         setSize(new java.awt.Dimension(916, 509));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        gerarListagem();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            evt.consume();
+            gerarListagem();
+        }
+    }//GEN-LAST:event_jButton1KeyPressed
+
+    private void gerarListagem() {
+        try {
+            gerarListagemDoBanco();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao gerar listagem: " + e.getMessage());
+        }
+    }
+
+    private void gerarListagemDoBanco() throws Exception {
+        Paciente paciente = buscarPaciente();
+        if (paciente == null) {
+            throw new Exception("Paciente não encontrado.");
+        }
+
+        String opcao = (String) tipoDeListaListarInfoPaciente.getSelectedItem();
+        StringBuilder texto = new StringBuilder();
+        AtendimentoHospitalarDAO dao = new AtendimentoHospitalarDAO();
+
+        if ("Diagnósticos do paciente".equals(opcao)) {
+            for (Diagnostico diagnostico : dao.listarDiagnosticosPorPaciente(paciente.getId())) {
+                texto.append("Diagnóstico nº ").append(diagnostico.getId())
+                        .append(" - ").append(diagnostico.getDescricao())
+                        .append(" - ").append(diagnostico.getDataDiagnostico())
+                        .append("\n");
+            }
+        } else {
+            for (Receita receita : dao.listarReceitasPorPaciente(paciente.getId())) {
+                texto.append("Receita nº ").append(receita.getId())
+                        .append(" - ").append(receita.getPrescricao())
+                        .append(" - ").append(receita.getDataEmissao())
+                        .append("\n");
+            }
+        }
+
+        if (texto.length() == 0) {
+            texto.append("Nenhum registro encontrado para ").append(paciente.getNome()).append(".");
+        }
+
+        JTextArea area = new JTextArea(texto.toString(), 15, 60);
+        area.setEditable(false);
+        JOptionPane.showMessageDialog(
+                this,
+                new JScrollPane(area),
+                "Dados de " + paciente.getNome(),
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private Paciente buscarPaciente() throws Exception {
+        PacienteDAO dao = new PacienteDAO();
+        String cpf = cpfListarInfoPaciente.getText().trim();
+        String nome = nomeListarInfoPaciente.getText().trim();
+
+        if (!cpf.isEmpty()) {
+            Paciente paciente = dao.buscarPorCpf(cpf);
+            if (paciente != null && (nome.isEmpty() || paciente.getNome().equalsIgnoreCase(nome))) {
+                return paciente;
+            }
+            return null;
+        }
+
+        for (Paciente paciente : dao.listar()) {
+            if (paciente.getNome().equalsIgnoreCase(nome)) {
+                return paciente;
+            }
+        }
+        return null;
+    }
 
     /**
      * @param args the command line arguments

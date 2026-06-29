@@ -4,20 +4,37 @@
  */
 package components;
 
+import AtendimentoHospitalar.Diagnostico;
+import Conexao.AtendimentoHospitalarDAO;
+import Conexao.PacienteDAO;
+import java.time.LocalDateTime;
+import javax.swing.JOptionPane;
+import models.Pacientes.Paciente;
+import models.Usuario;
+
 /**
  *
  * @author dpaiv
  */
 public class RegistrarDiagnostico extends javax.swing.JDialog {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RegistrarDiagnostico.class.getName());
+    private final AtendimentoHospitalarDAO atendimentoDAO = new AtendimentoHospitalarDAO();
+    private final PacienteDAO pacienteDAO = new PacienteDAO();
+    private Usuario medico;
 
     /**
      * Creates new form MenuMedico
      */
     public RegistrarDiagnostico(java.awt.Frame parent, boolean modal) {
+        this(parent, modal, null);
+    }
+
+    public RegistrarDiagnostico(java.awt.Frame parent, boolean modal, Usuario medico) {
         super(parent, modal);
         initComponents();
+        this.medico = medico;
+        setLocationRelativeTo(parent);
     }
 
     /**
@@ -140,12 +157,73 @@ public class RegistrarDiagnostico extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        registrarDiagnostico();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void nomeRegistrarDiagnosticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nomeRegistrarDiagnosticoActionPerformed
-        // TODO add your handling code here:
+        diagnosticoRegistrarDiagnostico.requestFocusInWindow();
     }//GEN-LAST:event_nomeRegistrarDiagnosticoActionPerformed
+
+    private void registrarDiagnostico() {
+        try {
+            int pacienteId = Integer.parseInt(idRegistrarDiagnostico.getText().trim());
+            Paciente paciente = pacienteDAO.buscar(pacienteId);
+            if (paciente == null) {
+                throw new Exception("Paciente não encontrado.");
+            }
+
+            String cpfInformado = cpfRegistrarDiagnostico.getText().replaceAll("\\D", "");
+            if (!paciente.getCpf().equals(cpfInformado)) {
+                throw new Exception("O CPF não pertence ao paciente informado.");
+            }
+
+            String nomeInformado = nomeRegistrarDiagnostico.getText().trim();
+            if (!paciente.getNome().equalsIgnoreCase(nomeInformado)) {
+                throw new Exception("O nome não pertence ao paciente informado.");
+            }
+
+            Diagnostico diagnostico = new Diagnostico();
+            diagnostico.setPacienteId(paciente.getId());
+            diagnostico.setPacienteCpf(paciente.getCpf());
+            diagnostico.setPacienteNome(paciente.getNome());
+            diagnostico.setDescricao(diagnosticoRegistrarDiagnostico.getText().trim());
+            diagnostico.setDataDiagnostico(LocalDateTime.now());
+
+            if (medico != null) {
+                diagnostico.setMedicoId(medico.getFuncionarioId());
+            }
+
+            Integer idDiagnostico = atendimentoDAO.salvarDiagnostico(diagnostico);
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Diagnóstico nº " + idDiagnostico + " registrado.",
+                    "Diagnóstico registrado",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            limparCampos();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "ID do paciente deve ser um número inteiro positivo.",
+                    "Dados inválidos",
+                    JOptionPane.WARNING_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    e.getMessage(),
+                    "Não foi possível registrar o diagnóstico",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private void limparCampos() {
+        cpfRegistrarDiagnostico.setText("");
+        nomeRegistrarDiagnostico.setText("");
+        idRegistrarDiagnostico.setText("");
+        diagnosticoRegistrarDiagnostico.setText("");
+        cpfRegistrarDiagnostico.requestFocusInWindow();
+    }
 
     /**
      * @param args the command line arguments
