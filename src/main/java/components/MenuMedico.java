@@ -105,7 +105,7 @@ public class MenuMedico extends javax.swing.JDialog {
             case "Registrar Diagnóstico" ->
                 new RegistrarDiagnostico(null, true, userMed).setVisible(true);
             case "Listar dados" ->
-                new MenuListagem(null, true).setVisible(true);
+                new MenuListagem(null, true, userMed).setVisible(true);
             case "Cadastrar Paciente" ->
                 new CadastroPaciente(null, true).setVisible(true);
             case "Registrar Receita" ->

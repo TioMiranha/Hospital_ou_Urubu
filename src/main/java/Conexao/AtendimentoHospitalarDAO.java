@@ -129,6 +129,39 @@ public class AtendimentoHospitalarDAO {
         return aplicacoes;
     }
 
+    public List<AplicacaoMedicamento> listarAplicacoesPorPaciente(int pacienteId) throws Exception {
+        List<AplicacaoMedicamento> aplicacoes = new ArrayList<>();
+        String sql = """
+                SELECT * FROM aplicacoes_medicamento
+                WHERE paciente_id = ?
+                ORDER BY data_aplicacao
+                """;
+
+        try (Connection con = new Conexao().abrirConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, pacienteId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    aplicacoes.add(criarAplicacao(rs));
+                }
+            }
+        }
+        return aplicacoes;
+    }
+
+    public void excluirDiagnostico(int id) throws Exception {
+        excluirRegistro("DELETE FROM diagnosticos WHERE id = ?", id, "Diagnóstico");
+    }
+
+    public void excluirReceita(int id) throws Exception {
+        excluirRegistro("DELETE FROM receitas WHERE id = ?", id, "Receita");
+    }
+
+    public void excluirAplicacao(int id) throws Exception {
+        excluirRegistro("DELETE FROM aplicacoes_medicamento WHERE id = ?", id, "Aplicação");
+    }
+
     public Integer salvarDiagnostico(Diagnostico diagnostico) throws Exception {
         if (diagnostico == null || diagnostico.getDescricao() == null
                 || diagnostico.getDescricao().isBlank()) {
@@ -282,5 +315,15 @@ public class AtendimentoHospitalarDAO {
     private Integer lerInteiroOuNulo(ResultSet rs, String coluna) throws Exception {
         int valor = rs.getInt(coluna);
         return rs.wasNull() ? null : valor;
+    }
+
+    private void excluirRegistro(String sql, int id, String nome) throws Exception {
+        try (Connection con = new Conexao().abrirConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            if (ps.executeUpdate() == 0) {
+                throw new Exception(nome + " não encontrado.");
+            }
+        }
     }
 }

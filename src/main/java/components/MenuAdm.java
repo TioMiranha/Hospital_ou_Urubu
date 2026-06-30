@@ -48,7 +48,7 @@ public class MenuAdm extends javax.swing.JDialog {
         textFuncMenuDr.setText("Escolha a funcionalidade");
 
         funcionalidadeMenuADM.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
-        funcionalidadeMenuADM.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cadastrar Funcionario", "Registrar Diagnóstico", "Listar dados", "Cadastrar Paciente", "Registrar Receita" }));
+        funcionalidadeMenuADM.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cadastrar Funcionario", "Listar dados" }));
 
         jButton1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jButton1.setText("Ir");
@@ -98,14 +98,8 @@ public class MenuAdm extends javax.swing.JDialog {
         switch (funcionalidade) {
             case "Cadastrar Funcionario" ->
                 new Cadastro(null, true).setVisible(true);
-            case "Registrar Diagnóstico" ->
-                new RegistrarDiagnostico(null, true).setVisible(true);
             case "Listar dados" ->
-                new MenuListagem(null, true).setVisible(true);
-            case "Cadastrar Paciente" ->
-                new CadastroPaciente(null, true).setVisible(true);
-            case "Registrar Receita" ->
-                new RegistrarReceita(null, true).setVisible(true);
+                new MenuListagem(null, true, userAdmin).setVisible(true);
             default -> {
             }
         }

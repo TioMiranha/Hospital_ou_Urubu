@@ -7,12 +7,17 @@ package components;
 import Conexao.EnfermeiroDAO;
 import Conexao.MedicoDAO;
 import Conexao.PacienteDAO;
+import Conexao.UsuarioDAO;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 import models.Funcionarios.Enfermeiro;
 import models.Funcionarios.Medico;
 import models.Pacientes.Paciente;
+import models.Usuario;
 
 /**
  *
@@ -21,13 +26,36 @@ import models.Pacientes.Paciente;
 public class MenuListagem extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuListagem.class.getName());
+    private Usuario usuarioLogado;
+
+    private interface ExcluirDaTabela {
+        void excluir(int id) throws Exception;
+    }
 
     /**
      * Creates new form MenudeRelatorio
      */
     public MenuListagem(java.awt.Frame parent, boolean modal) {
+        this(parent, modal, null);
+    }
+
+    public MenuListagem(java.awt.Frame parent, boolean modal, Usuario usuarioLogado) {
         super(parent, modal);
         initComponents();
+        this.usuarioLogado = usuarioLogado;
+
+        // cada tipo de usuário vê somente as listas dele
+        tipoDeListaMenuListagem.removeAllItems();
+        if (temPerfil("Admin")) {
+            tipoDeListaMenuListagem.addItem("Todos Médicos");
+            tipoDeListaMenuListagem.addItem("Todos Enfermeiros");
+            tipoDeListaMenuListagem.addItem("Todos Pacientes");
+            tipoDeListaMenuListagem.addItem("Dados do paciente");
+            tipoDeListaMenuListagem.addItem("Todos Usuários");
+        } else if (temPerfil("Medico") || temPerfil("Enfermeiro")) {
+            tipoDeListaMenuListagem.addItem("Todos Pacientes");
+            tipoDeListaMenuListagem.addItem("Dados do paciente");
+        }
     }
 
     /**
@@ -54,7 +82,7 @@ public class MenuListagem extends javax.swing.JDialog {
         jLabel1.setText("O que você quer listar?");
 
         tipoDeListaMenuListagem.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
-        tipoDeListaMenuListagem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos Médicos", "Todos Enfermeiros", "Todos Pacientes", "Diagnósticos/Receitas do paciente" }));
+        tipoDeListaMenuListagem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
         tipoDeListaMenuListagem.addActionListener(this::tipoDeListaMenuListagemActionPerformed);
 
         jButton1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
@@ -129,50 +157,192 @@ public class MenuListagem extends javax.swing.JDialog {
     }
 
     private void gerarListagemDoBanco() throws Exception {
-        String opcao = (String) tipoDeListaMenuListagem.getSelectedItem();
+        Object itemEscolhido = tipoDeListaMenuListagem.getSelectedItem();
+        if (itemEscolhido == null) {
+            throw new Exception("Usuário sem permissão para realizar listagens.");
+        }
+        String opcao = itemEscolhido.toString();
 
-        if ("Diagnósticos/Receitas do paciente".equals(opcao)) {
-            new ListarInfoPaciente(null, true).setVisible(true);
+        if ("Dados do paciente".equals(opcao)) {
+            new ListarInfoPaciente(null, true, usuarioLogado).setVisible(true);
             return;
         }
 
-        StringBuilder texto = new StringBuilder();
-
         if ("Todos Médicos".equals(opcao)) {
-            for (Medico medico : new MedicoDAO().listar()) {
-                texto.append("ID: ").append(medico.getId())
-                        .append(" | Nome: ").append(medico.getNome())
-                        .append(" | CRM: ").append(medico.getCrm())
-                        .append(" | Especialidade: ").append(medico.getEspecialidade())
-                        .append("\n");
-            }
+            listarMedicos();
         } else if ("Todos Enfermeiros".equals(opcao)) {
-            for (Enfermeiro enfermeiro : new EnfermeiroDAO().listar()) {
-                texto.append("ID: ").append(enfermeiro.getId())
-                        .append(" | Nome: ").append(enfermeiro.getNome())
-                        .append(" | Coren: ").append(enfermeiro.getCoren())
-                        .append("\n");
-            }
+            listarEnfermeiros();
         } else if ("Todos Pacientes".equals(opcao)) {
-            for (Paciente paciente : new PacienteDAO().listar()) {
-                texto.append("ID: ").append(paciente.getId())
-                        .append(" | Nome: ").append(paciente.getNome())
-                        .append(" | CPF: ").append(paciente.getCpf())
-                        .append("\n");
+            listarPacientes();
+        } else if ("Todos Usuários".equals(opcao)) {
+            listarUsuarios();
+        } else {
+            throw new Exception("Listagem não permitida para este usuário.");
+        }
+    }
+
+    private void listarMedicos() throws Exception {
+        if (!temPerfil("Admin")) {
+            throw new Exception("Apenas administradores podem listar médicos.");
+        }
+
+        ArrayList<Medico> medicos = new MedicoDAO().listar();
+        Object[][] dados = new Object[medicos.size()][4];
+
+        for (int i = 0; i < medicos.size(); i++) {
+            Medico medico = medicos.get(i);
+            dados[i][0] = medico.getId();
+            dados[i][1] = medico.getNome();
+            dados[i][2] = medico.getCrm();
+            dados[i][3] = medico.getEspecialidade();
+        }
+
+        mostrarTabela(
+                "Médicos",
+                new String[]{"ID", "Nome", "CRM", "Especialidade"},
+                dados,
+                false,
+                null);
+    }
+
+    private void listarEnfermeiros() throws Exception {
+        if (!temPerfil("Admin")) {
+            throw new Exception("Apenas administradores podem listar enfermeiros.");
+        }
+
+        ArrayList<Enfermeiro> enfermeiros = new EnfermeiroDAO().listar();
+        Object[][] dados = new Object[enfermeiros.size()][3];
+
+        for (int i = 0; i < enfermeiros.size(); i++) {
+            Enfermeiro enfermeiro = enfermeiros.get(i);
+            dados[i][0] = enfermeiro.getId();
+            dados[i][1] = enfermeiro.getNome();
+            dados[i][2] = enfermeiro.getCoren();
+        }
+
+        mostrarTabela(
+                "Enfermeiros",
+                new String[]{"ID", "Nome", "Coren"},
+                dados,
+                false,
+                null);
+    }
+
+    private void listarPacientes() throws Exception {
+        if (!temPerfil("Admin") && !temPerfil("Medico") && !temPerfil("Enfermeiro")) {
+            throw new Exception("Usuário sem permissão para listar pacientes.");
+        }
+
+        PacienteDAO dao = new PacienteDAO();
+        ArrayList<Paciente> pacientes = dao.listar();
+        Object[][] dados = new Object[pacientes.size()][5];
+
+        for (int i = 0; i < pacientes.size(); i++) {
+            Paciente paciente = pacientes.get(i);
+            dados[i][0] = paciente.getId();
+            dados[i][1] = paciente.getNome();
+            dados[i][2] = paciente.getCpf();
+            dados[i][3] = paciente.getDataNascimento();
+            dados[i][4] = paciente.getTelefone();
+        }
+
+        boolean podeExcluir = temPerfil("Medico") || temPerfil("Enfermeiro");
+        mostrarTabela(
+                "Pacientes",
+                new String[]{"ID", "Nome", "CPF", "Nascimento", "Telefone"},
+                dados,
+                podeExcluir,
+                dao::excluir);
+    }
+
+    private void listarUsuarios() throws Exception {
+        if (!temPerfil("Admin")) {
+            throw new Exception("Apenas administradores podem listar usuários.");
+        }
+
+        UsuarioDAO dao = new UsuarioDAO();
+        ArrayList<Usuario> usuarios = dao.Listar();
+        Object[][] dados = new Object[usuarios.size()][4];
+
+        for (int i = 0; i < usuarios.size(); i++) {
+            Usuario usuario = usuarios.get(i);
+            dados[i][0] = usuario.getId();
+            dados[i][1] = usuario.getEmail();
+            dados[i][2] = usuario.getPerfil();
+            dados[i][3] = Boolean.TRUE.equals(usuario.getAtivo()) ? "Sim" : "Não";
+        }
+
+        mostrarTabela(
+                "Usuários",
+                new String[]{"ID", "Email", "Perfil", "Ativo"},
+                dados,
+                true,
+                id -> {
+                    if (usuarioLogado != null && usuarioLogado.getId() == id) {
+                        throw new Exception("O administrador não pode excluir o próprio usuário.");
+                    }
+                    dao.excluir(id);
+                });
+    }
+
+    private void mostrarTabela(String titulo, String[] colunas, Object[][] dados,
+            boolean podeExcluir, ExcluirDaTabela acaoExcluir) {
+
+        DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
+            @Override
+            public boolean isCellEditable(int linha, int coluna) {
+                return false;
+            }
+        };
+
+        JTable tabela = new JTable(modelo);
+        tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane painelTabela = new JScrollPane(tabela);
+        painelTabela.setPreferredSize(new java.awt.Dimension(750, 350));
+
+        if (!podeExcluir) {
+            JOptionPane.showMessageDialog(this, painelTabela, titulo, JOptionPane.PLAIN_MESSAGE);
+            return;
+        }
+
+        Object[] botoes = {"Excluir selecionado", "Fechar"};
+        boolean continuar = true;
+
+        while (continuar) {
+            int opcao = JOptionPane.showOptionDialog(
+                    this, painelTabela, titulo, JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.PLAIN_MESSAGE, null, botoes, botoes[1]);
+
+            if (opcao != 0) {
+                continuar = false;
+            } else if (tabela.getSelectedRow() < 0) {
+                JOptionPane.showMessageDialog(this, "Selecione uma linha para excluir.");
+            } else {
+                int confirmar = JOptionPane.showConfirmDialog(
+                        this,
+                        "Deseja realmente excluir o registro selecionado?",
+                        "Confirmar exclusão",
+                        JOptionPane.YES_NO_OPTION);
+
+                if (confirmar == JOptionPane.YES_OPTION) {
+                    try {
+                        int linha = tabela.getSelectedRow();
+                        int id = ((Number) modelo.getValueAt(linha, 0)).intValue();
+                        acaoExcluir.excluir(id);
+                        modelo.removeRow(linha);
+                        JOptionPane.showMessageDialog(this, "Registro excluído.");
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, "Erro ao excluir: " + e.getMessage());
+                    }
+                }
             }
         }
+    }
 
-        if (texto.length() == 0) {
-            texto.append("Nenhum registro encontrado.");
-        }
-
-        JTextArea area = new JTextArea(texto.toString(), 15, 60);
-        area.setEditable(false);
-        JOptionPane.showMessageDialog(
-                this,
-                new JScrollPane(area),
-                "Listagem",
-                JOptionPane.INFORMATION_MESSAGE);
+    private boolean temPerfil(String perfil) {
+        return usuarioLogado != null
+                && usuarioLogado.getPerfil() != null
+                && usuarioLogado.getPerfil().equalsIgnoreCase(perfil);
     }
 
     /**

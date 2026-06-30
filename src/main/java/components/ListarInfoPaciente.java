@@ -4,14 +4,19 @@
  */
 package components;
 
+import AtendimentoHospitalar.AplicacaoMedicamento;
 import AtendimentoHospitalar.Diagnostico;
 import AtendimentoHospitalar.Receita;
 import Conexao.AtendimentoHospitalarDAO;
 import Conexao.PacienteDAO;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 import models.Pacientes.Paciente;
+import models.Usuario;
 
 /**
  *
@@ -20,13 +25,34 @@ import models.Pacientes.Paciente;
 public class ListarInfoPaciente extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ListarInfoPaciente.class.getName());
+    private Usuario usuarioLogado;
+
+    private interface ExcluirDaTabela {
+        void excluir(int id) throws Exception;
+    }
 
     /**
      * Creates new form MenudeRelatorio
      */
     public ListarInfoPaciente(java.awt.Frame parent, boolean modal) {
+        this(parent, modal, null);
+    }
+
+    public ListarInfoPaciente(java.awt.Frame parent, boolean modal, Usuario usuarioLogado) {
         super(parent, modal);
         initComponents();
+        this.usuarioLogado = usuarioLogado;
+
+        // coloca no combo só o que o usuário pode consultar
+        tipoDeListaListarInfoPaciente.removeAllItems();
+        if (temPerfil("Admin") || temPerfil("Medico")) {
+            tipoDeListaListarInfoPaciente.addItem("Diagnósticos do paciente");
+        }
+        if (temPerfil("Admin") || temPerfil("Medico") || temPerfil("Enfermeiro")) {
+            tipoDeListaListarInfoPaciente.addItem("Receitas do paciente");
+            tipoDeListaListarInfoPaciente.addItem("Aplicações do paciente");
+        }
+        jButton1.setEnabled(tipoDeListaListarInfoPaciente.getItemCount() > 0);
     }
 
     /**
@@ -57,7 +83,7 @@ public class ListarInfoPaciente extends javax.swing.JDialog {
         jLabel1.setText("O que você quer listar?");
 
         tipoDeListaListarInfoPaciente.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
-        tipoDeListaListarInfoPaciente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Diagnósticos do paciente", "Receitas do paciente" }));
+        tipoDeListaListarInfoPaciente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
 
         jButton1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jButton1.setText("Gerar");
@@ -159,36 +185,154 @@ public class ListarInfoPaciente extends javax.swing.JDialog {
         }
 
         String opcao = (String) tipoDeListaListarInfoPaciente.getSelectedItem();
-        StringBuilder texto = new StringBuilder();
-        AtendimentoHospitalarDAO dao = new AtendimentoHospitalarDAO();
 
-        if ("Diagnósticos do paciente".equals(opcao)) {
-            for (Diagnostico diagnostico : dao.listarDiagnosticosPorPaciente(paciente.getId())) {
-                texto.append("Diagnóstico nº ").append(diagnostico.getId())
-                        .append(" - ").append(diagnostico.getDescricao())
-                        .append(" - ").append(diagnostico.getDataDiagnostico())
-                        .append("\n");
-            }
+        if (opcao == null) {
+            throw new Exception("Usuário sem permissão para consultar dados do paciente.");
+        } else if ("Diagnósticos do paciente".equals(opcao)) {
+            listarDiagnosticos(paciente);
+        } else if ("Receitas do paciente".equals(opcao)) {
+            listarReceitas(paciente);
+        } else if ("Aplicações do paciente".equals(opcao)) {
+            listarAplicacoes(paciente);
         } else {
-            for (Receita receita : dao.listarReceitasPorPaciente(paciente.getId())) {
-                texto.append("Receita nº ").append(receita.getId())
-                        .append(" - ").append(receita.getPrescricao())
-                        .append(" - ").append(receita.getDataEmissao())
-                        .append("\n");
+            throw new Exception("Consulta não permitida para este usuário.");
+        }
+    }
+
+    private void listarDiagnosticos(Paciente paciente) throws Exception {
+        if (!temPerfil("Admin") && !temPerfil("Medico")) {
+            throw new Exception("Este perfil não pode listar diagnósticos.");
+        }
+
+        AtendimentoHospitalarDAO dao = new AtendimentoHospitalarDAO();
+        List<Diagnostico> diagnosticos = dao.listarDiagnosticosPorPaciente(paciente.getId());
+        Object[][] dados = new Object[diagnosticos.size()][4];
+
+        for (int i = 0; i < diagnosticos.size(); i++) {
+            Diagnostico diagnostico = diagnosticos.get(i);
+            dados[i][0] = diagnostico.getId();
+            dados[i][1] = diagnostico.getDescricao();
+            dados[i][2] = diagnostico.getObservacoes();
+            dados[i][3] = diagnostico.getDataDiagnostico();
+        }
+
+        mostrarTabela(
+                "Diagnósticos de " + paciente.getNome(),
+                new String[]{"ID", "Diagnóstico", "Observações", "Data"},
+                dados,
+                temPerfil("Medico"),
+                dao::excluirDiagnostico);
+    }
+
+    private void listarReceitas(Paciente paciente) throws Exception {
+        if (!temPerfil("Admin") && !temPerfil("Medico") && !temPerfil("Enfermeiro")) {
+            throw new Exception("Este perfil não pode listar medicamentos do paciente.");
+        }
+
+        AtendimentoHospitalarDAO dao = new AtendimentoHospitalarDAO();
+        List<Receita> receitas = dao.listarReceitasPorPaciente(paciente.getId());
+        Object[][] dados = new Object[receitas.size()][4];
+
+        for (int i = 0; i < receitas.size(); i++) {
+            Receita receita = receitas.get(i);
+            dados[i][0] = receita.getId();
+            dados[i][1] = receita.getPrescricao();
+            dados[i][2] = receita.isAplicarNoHospital() ? "Sim" : "Não";
+            dados[i][3] = receita.getDataEmissao();
+        }
+
+        mostrarTabela(
+                "Receitas de " + paciente.getNome(),
+                new String[]{"ID", "Prescrição", "Aplicar no hospital", "Data"},
+                dados,
+                temPerfil("Medico"),
+                dao::excluirReceita);
+    }
+
+    private void listarAplicacoes(Paciente paciente) throws Exception {
+        if (!temPerfil("Admin") && !temPerfil("Medico") && !temPerfil("Enfermeiro")) {
+            throw new Exception("Este perfil não pode listar medicamentos do paciente.");
+        }
+
+        AtendimentoHospitalarDAO dao = new AtendimentoHospitalarDAO();
+        List<AplicacaoMedicamento> aplicacoes = dao.listarAplicacoesPorPaciente(paciente.getId());
+        Object[][] dados = new Object[aplicacoes.size()][5];
+
+        for (int i = 0; i < aplicacoes.size(); i++) {
+            AplicacaoMedicamento aplicacao = aplicacoes.get(i);
+            dados[i][0] = aplicacao.getId();
+            dados[i][1] = aplicacao.getReceitaId();
+            dados[i][2] = aplicacao.getDosagemAplicada();
+            dados[i][3] = aplicacao.getViaAplicacao();
+            dados[i][4] = aplicacao.getDataAplicacao();
+        }
+
+        mostrarTabela(
+                "Aplicações de " + paciente.getNome(),
+                new String[]{"ID", "Receita", "Dosagem", "Via", "Data"},
+                dados,
+                temPerfil("Enfermeiro"),
+                dao::excluirAplicacao);
+    }
+
+    private void mostrarTabela(String titulo, String[] colunas, Object[][] dados,
+            boolean podeExcluir, ExcluirDaTabela acaoExcluir) {
+
+        DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
+            @Override
+            public boolean isCellEditable(int linha, int coluna) {
+                return false;
+            }
+        };
+
+        JTable tabela = new JTable(modelo);
+        tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane painelTabela = new JScrollPane(tabela);
+        painelTabela.setPreferredSize(new java.awt.Dimension(750, 350));
+
+        if (!podeExcluir) {
+            JOptionPane.showMessageDialog(this, painelTabela, titulo, JOptionPane.PLAIN_MESSAGE);
+            return;
+        }
+
+        Object[] botoes = {"Excluir selecionado", "Fechar"};
+        boolean continuar = true;
+
+        while (continuar) {
+            int opcao = JOptionPane.showOptionDialog(
+                    this, painelTabela, titulo, JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.PLAIN_MESSAGE, null, botoes, botoes[1]);
+
+            if (opcao != 0) {
+                continuar = false;
+            } else if (tabela.getSelectedRow() < 0) {
+                JOptionPane.showMessageDialog(this, "Selecione uma linha para excluir.");
+            } else {
+                int confirmar = JOptionPane.showConfirmDialog(
+                        this,
+                        "Deseja realmente excluir o registro selecionado?",
+                        "Confirmar exclusão",
+                        JOptionPane.YES_NO_OPTION);
+
+                if (confirmar == JOptionPane.YES_OPTION) {
+                    try {
+                        int linha = tabela.getSelectedRow();
+                        int id = ((Number) modelo.getValueAt(linha, 0)).intValue();
+                        acaoExcluir.excluir(id);
+                        modelo.removeRow(linha);
+                        JOptionPane.showMessageDialog(this, "Registro excluído.");
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, "Erro ao excluir: " + e.getMessage());
+                    }
+                }
             }
         }
+    }
 
-        if (texto.length() == 0) {
-            texto.append("Nenhum registro encontrado para ").append(paciente.getNome()).append(".");
-        }
-
-        JTextArea area = new JTextArea(texto.toString(), 15, 60);
-        area.setEditable(false);
-        JOptionPane.showMessageDialog(
-                this,
-                new JScrollPane(area),
-                "Dados de " + paciente.getNome(),
-                JOptionPane.INFORMATION_MESSAGE);
+    private boolean temPerfil(String perfil) {
+        return usuarioLogado != null
+                && usuarioLogado.getPerfil() != null
+                && usuarioLogado.getPerfil().equalsIgnoreCase(perfil);
     }
 
     private Paciente buscarPaciente() throws Exception {

@@ -120,6 +120,17 @@ public class UsuarioDAO {
         }
     }
 
+    public void excluir(int id) throws Exception {
+        String sql = "DELETE FROM usuarios WHERE id = ?";
+        try (Connection con = new Conexao().abrirConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            if (ps.executeUpdate() == 0) {
+                throw new Exception("Usuário não encontrado.");
+            }
+        }
+    }
+
     public ArrayList<Usuario> Listar() throws Exception {
         ArrayList<Usuario> usuarios = new ArrayList<>();
         String sql = "SELECT * FROM usuarios ORDER BY email";

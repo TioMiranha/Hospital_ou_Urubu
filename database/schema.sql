@@ -54,7 +54,8 @@ CREATE TABLE IF NOT EXISTS diagnosticos (
     descricao TEXT NOT NULL,
     observacoes TEXT,
     data_diagnostico DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (paciente_id) REFERENCES pacientes(id),
+    FOREIGN KEY (paciente_id) REFERENCES pacientes(id)
+        ON DELETE CASCADE,
     FOREIGN KEY (medico_id) REFERENCES medicos(funcionario_id)
         ON DELETE SET NULL
 );
@@ -66,7 +67,8 @@ CREATE TABLE IF NOT EXISTS receitas (
     prescricao TEXT NOT NULL,
     aplicar_no_hospital BOOLEAN NOT NULL DEFAULT FALSE,
     data_emissao DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (paciente_id) REFERENCES pacientes(id),
+    FOREIGN KEY (paciente_id) REFERENCES pacientes(id)
+        ON DELETE CASCADE,
     FOREIGN KEY (medico_id) REFERENCES medicos(funcionario_id)
         ON DELETE SET NULL
 );
@@ -80,8 +82,10 @@ CREATE TABLE IF NOT EXISTS aplicacoes_medicamento (
     via_aplicacao VARCHAR(100) NOT NULL,
     observacoes TEXT,
     data_aplicacao DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (receita_id) REFERENCES receitas(id),
-    FOREIGN KEY (paciente_id) REFERENCES pacientes(id),
+    FOREIGN KEY (receita_id) REFERENCES receitas(id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (paciente_id) REFERENCES pacientes(id)
+        ON DELETE CASCADE,
     FOREIGN KEY (enfermeiro_id) REFERENCES enfermeiros(funcionario_id)
         ON DELETE SET NULL
 );

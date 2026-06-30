@@ -100,7 +100,7 @@ public class MenuEnfermeiro extends javax.swing.JDialog {
             case "Aplicar Medicamento" ->
                 new AplicarMedicamento(null, true, userEnf).setVisible(true);
             case "Listar dados" ->
-                new MenuListagem(null, true).setVisible(true);
+                new MenuListagem(null, true, userEnf).setVisible(true);
             default -> {
             }
         }

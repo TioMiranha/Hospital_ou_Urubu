@@ -81,6 +81,17 @@ public class PacienteDAO {
         return null;
     }
 
+    public void excluir(int id) throws Exception {
+        String sql = "DELETE FROM pacientes WHERE id = ?";
+        try (Connection con = new Conexao().abrirConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            if (ps.executeUpdate() == 0) {
+                throw new Exception("Paciente não encontrado.");
+            }
+        }
+    }
+
     private Paciente criarPaciente(ResultSet rs) throws Exception {
         Paciente paciente = new Paciente();
         paciente.setId(rs.getInt("id"));
